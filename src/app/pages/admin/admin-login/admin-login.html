@@ -1,0 +1,23 @@
+<section class="login-page">
+  <form (ngSubmit)="login()" class="login-card">
+    <h1>Admin Reimii 3D</h1>
+
+    <input type="email" name="email" placeholder="Email" [(ngModel)]="email" required />
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Contraseña"
+      [(ngModel)]="password"
+      required
+    />
+
+    <p *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
+
+    <button [disabled]="loading">
+      {{ loading ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </form>
+</section>

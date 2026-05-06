@@ -1,0 +1,22 @@
+<h1>Solicitudes personalizadas</h1>
+
+<div class="card" *ngFor="let custom of customs">
+  <h3>{{ custom.name }}</h3>
+
+  <p>Email: {{ custom.email }}</p>
+  <p>Teléfono: {{ custom.phone || '-' }}</p>
+  <p>Tipo: {{ custom.type || '-' }}</p>
+  <p>Tamaño: {{ custom.size || '-' }}</p>
+  <p>Presupuesto: {{ custom.budget | currency: 'EUR' }}</p>
+  <p>Fecha límite: {{ custom.deadline | date: 'dd/MM/yyyy' }}</p>
+  <p>Estado: {{ custom.status }}</p>
+
+  <h4>Descripción</h4>
+  <p>{{ custom.description }}</p>
+
+  <div class="images" *ngIf="custom.images?.length">
+    <a *ngFor="let image of custom.images" [href]="image" target="_blank">
+      <img [src]="image" />
+    </a>
+  </div>
+</div>

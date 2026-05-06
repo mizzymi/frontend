@@ -1,0 +1,126 @@
+<section class="products-page">
+  <div class="header">
+    <div>
+      <span class="badge"> ADMIN PRODUCTOS </span>
+
+      <h1>Gestión de productos</h1>
+
+      <p>Añade, edita y elimina productos de Reimii 3D.</p>
+    </div>
+  </div>
+
+  <form class="card" (ngSubmit)="createProduct()">
+    <h2>Añadir producto</h2>
+
+    <div class="grid">
+      <input name="name" placeholder="Nombre" [(ngModel)]="formData.name" required />
+
+      <input
+        name="price"
+        type="number"
+        placeholder="Precio"
+        [(ngModel)]="formData.price"
+        required
+      />
+
+      <input name="stock" type="number" placeholder="Stock" [(ngModel)]="formData.stock" required />
+
+      <input name="category" placeholder="Categoría" [(ngModel)]="formData.category" />
+
+      <textarea
+        class="full"
+        name="description"
+        placeholder="Descripción"
+        [(ngModel)]="formData.description"
+      ></textarea>
+
+      <div class="full">
+        <label> Imágenes del producto </label>
+
+        <input type="file" multiple accept="image/*" (change)="onImagesSelected($event)" />
+      </div>
+    </div>
+
+    <button type="submit">Crear producto</button>
+
+    <p *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
+  </form>
+
+  <div *ngIf="loading" class="loading">Cargando productos...</div>
+
+  <div class="products-grid" *ngIf="!loading">
+    <article class="product-card" *ngFor="let product of products">
+      <img *ngIf="product.images?.length" [src]="product.images[0]" />
+
+      <div *ngIf="editingProduct?._id !== product._id">
+        <h3>
+          {{ product.name }}
+        </h3>
+
+        <p class="price">
+          {{ product.price | currency: 'EUR' }}
+        </p>
+
+        <p>
+          Stock:
+          {{ product.stock }}
+        </p>
+
+        <p>
+          Categoría:
+          {{ product.category || '-' }}
+        </p>
+
+        <div class="actions">
+          <button type="button" (click)="startEdit(product)">Editar</button>
+
+          <button type="button" class="danger" (click)="removeProduct(product)">Eliminar</button>
+        </div>
+      </div>
+
+      <div *ngIf="editingProduct?._id === product._id" class="edit-box">
+        <div class="field">
+          <label> Nombre del producto </label>
+
+          <input name="editName" [(ngModel)]="editForm.name" placeholder="Nombre" />
+        </div>
+
+        <div class="field">
+          <label> Precio (€) </label>
+
+          <input name="editPrice" type="number" [(ngModel)]="editForm.price" placeholder="Precio" />
+        </div>
+
+        <div class="field">
+          <label> Stock </label>
+
+          <input name="editStock" type="number" [(ngModel)]="editForm.stock" placeholder="Stock" />
+        </div>
+
+        <div class="field">
+          <label> Categoría </label>
+
+          <input name="editCategory" [(ngModel)]="editForm.category" placeholder="Categoría" />
+        </div>
+
+        <div class="field">
+          <label> Descripción </label>
+
+          <textarea
+            name="editDescription"
+            [(ngModel)]="editForm.description"
+            placeholder="Descripción"
+          ></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="button" (click)="saveEdit()">Guardar</button>
+
+          <button type="button" class="secondary" (click)="cancelEdit()">Cancelar</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>

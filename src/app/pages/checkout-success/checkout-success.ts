@@ -35,13 +35,18 @@ export class CheckoutSuccess implements OnInit {
         this.session = res.session;
         this.order = res.order;
 
-        if (this.session?.paymentStatus === 'paid') {
+        if (
+          this.session?.paymentStatus === 'paid' ||
+          sessionId.startsWith('free_order_') ||
+          this.order?.status === 'paid'
+        ) {
           this.cartService.clearCart();
         }
 
         this.loading = false;
       },
-      error: () => {
+      error: err => {
+        console.error('Error success:', err);
         this.loading = false;
       }
     });

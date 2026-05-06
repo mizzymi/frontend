@@ -97,8 +97,21 @@ export class Checkout implements OnInit {
       shippingAddress: this.shippingAddress,
       items: this.items
     }).subscribe({
-      next: res => {
-        window.location.href = res.url;
+      next: (res: any) => {
+        console.log('Respuesta checkout:', res);
+
+        if (res.url) {
+          window.location.href = res.url;
+          return;
+        }
+
+        if (res.redirectUrl) {
+          window.location.href = res.redirectUrl;
+          return;
+        }
+
+        this.error = 'No se recibió URL de redirección.';
+        this.loading = false;
       },
       error: err => {
         this.error = err.error?.message || 'Error al iniciar pago.';

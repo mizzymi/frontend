@@ -1,0 +1,57 @@
+h1 {
+  margin-bottom: 28px;
+  color: #2ee6c5;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+input,
+textarea {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0c2327;
+  color: white;
+}
+
+textarea {
+  min-height: 120px;
+}
+
+button {
+  background: linear-gradient(135deg, #2ee6c5, #18b89b);
+  color: #041214;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.product img,
+.images img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.error {
+  color: #ff9b9b;
+}

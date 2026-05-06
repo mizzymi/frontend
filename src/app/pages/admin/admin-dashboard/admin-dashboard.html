@@ -1,0 +1,113 @@
+<section class="dashboard">
+  <div class="header">
+    <div>
+      <span class="badge"> PANEL ADMIN </span>
+
+      <h1>Dashboard Reimii 3D</h1>
+
+      <p>Gestiona productos, pedidos y solicitudes personalizadas.</p>
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="loading">Cargando dashboard...</div>
+
+  <div class="stats-grid" *ngIf="!loading">
+    <div class="stat-card">
+      <span class="stat-label"> Productos </span>
+
+      <h2>
+        {{ stats.products }}
+      </h2>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-label"> Pedidos </span>
+
+      <h2>
+        {{ stats.orders }}
+      </h2>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-label"> Solicitudes custom </span>
+
+      <h2>
+        {{ stats.customs }}
+      </h2>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-label"> Ingresos </span>
+
+      <h2>
+        {{ stats.revenue | currency: 'EUR' }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="content-grid" *ngIf="!loading">
+    <div class="panel-card">
+      <div class="panel-header">
+        <h3>Último pedido</h3>
+      </div>
+
+      <div *ngIf="latestOrder">
+        <p>
+          <strong>Cliente:</strong>
+          {{ latestOrder.customerName }}
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          {{ latestOrder.email }}
+        </p>
+
+        <p>
+          <strong>Total:</strong>
+          {{ latestOrder.total | currency: 'EUR' }}
+        </p>
+
+        <p>
+          <strong>Estado:</strong>
+          {{ latestOrder.status }}
+        </p>
+      </div>
+
+      <div *ngIf="!latestOrder">
+        <p>No hay pedidos todavía.</p>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-header">
+        <h3>Última solicitud custom</h3>
+      </div>
+
+      <div *ngIf="latestCustom">
+        <p>
+          <strong>Cliente:</strong>
+          {{ latestCustom.name }}
+        </p>
+
+        <p>
+          <strong>Email:</strong>
+          {{ latestCustom.email }}
+        </p>
+
+        <p>
+          <strong>Tipo:</strong>
+          {{ latestCustom.type || '-' }}
+        </p>
+
+        <p>
+          <strong>Presupuesto:</strong>
+          {{ latestCustom.budget | currency: 'EUR' }}
+        </p>
+      </div>
+
+      <div *ngIf="!latestCustom">
+        <p>No hay solicitudes todavía.</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,115 @@
+<section class="custom-page">
+  <div class="hero">
+    <span class="badge"> PROYECTOS PERSONALIZADOS </span>
+
+    <h1>Haz realidad tus ideas</h1>
+
+    <p>
+      Impresión 3D personalizada, modelado, props de cosplay, prototipos y creaciones únicas hechas
+      para ti.
+    </p>
+  </div>
+
+  <div class="form-container">
+    <form (ngSubmit)="submitForm()">
+      <div class="grid">
+        <div class="field">
+          <label>Nombre</label>
+
+          <input type="text" name="name" [(ngModel)]="formData.name" required />
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+
+          <input type="email" name="email" [(ngModel)]="formData.email" required />
+        </div>
+
+        <div class="field">
+          <label>Teléfono</label>
+
+          <input type="text" name="phone" [(ngModel)]="formData.phone" />
+        </div>
+
+        <div class="field">
+          <label>Tipo de proyecto</label>
+
+          <select name="type" [(ngModel)]="formData.type">
+            <option value="">Selecciona un tipo</option>
+
+            <option *ngFor="let type of projectTypes" [value]="type">
+              {{ type }}
+            </option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Tamaño aproximado</label>
+
+          <input
+            type="text"
+            name="size"
+            [(ngModel)]="formData.size"
+            placeholder="Ejemplo: 25cm de altura"
+          />
+        </div>
+
+        <div class="field">
+          <label>Presupuesto (€)</label>
+
+          <input type="number" name="budget" [(ngModel)]="formData.budget" />
+        </div>
+
+        <div class="field full">
+          <label>Fecha límite</label>
+
+          <input type="date" name="deadline" [(ngModel)]="formData.deadline" />
+        </div>
+
+        <div class="field full">
+          <label>Descripción del proyecto</label>
+
+          <textarea
+            rows="8"
+            name="description"
+            [(ngModel)]="formData.description"
+            placeholder="Describe tu idea, materiales, estilo, dimensiones, colores..."
+            required
+          ></textarea>
+        </div>
+
+        <div class="field full">
+          <label>Imágenes de referencia</label>
+
+          <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" />
+        </div>
+
+        <div class="uploaded-files" *ngIf="selectedFiles.length">
+          <div class="file" *ngFor="let file of selectedFiles; let i = index">
+            <span>
+              {{ file.name }}
+            </span>
+
+            <button type="button" (click)="removeFile(i)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Enviando solicitud...' : 'Enviar solicitud personalizada' }}
+      </button>
+
+      <div *ngIf="success" class="success-box">
+        <h2>Solicitud enviada correctamente</h2>
+
+        <p>Hemos recibido tu solicitud personalizada y te contactaremos pronto.</p>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-box">
+        <h2>Ha ocurrido un error</h2>
+
+        <p>{{ errorMessage }}</p>
+      </div>
+    </form>
+  </div>
+</section>

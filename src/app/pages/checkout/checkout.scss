@@ -58,7 +58,8 @@
   }
 
   input {
-    width: 100%;
+    
+    width: calc(100% - 22px);
     margin-top: 7px;
     padding: 13px 14px;
     border-radius: 13px;

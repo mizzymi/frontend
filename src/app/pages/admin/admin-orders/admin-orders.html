@@ -1,0 +1,15 @@
+<h1>Pedidos</h1>
+
+<div class="card" *ngFor="let order of orders">
+  <h3>{{ order.customerName }}</h3>
+
+  <p>Email: {{ order.email }}</p>
+  <p>Estado: {{ order.status }}</p>
+  <p>Total: {{ order.total | currency: 'EUR' }}</p>
+
+  <h4>Productos</h4>
+
+  <ul>
+    <li *ngFor="let item of order.items">{{ item.name }} x{{ item.quantity }}</li>
+  </ul>
+</div>

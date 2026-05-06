@@ -1,0 +1,41 @@
+.admin-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  background: #061417;
+  color: white;
+}
+
+aside {
+  padding: 32px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #071a1d;
+}
+
+h2 {
+  color: #2ee6c5;
+  margin-bottom: 32px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+a {
+  color: #dce7e8;
+  text-decoration: none;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+a:hover {
+  background: rgba(46, 230, 197, 0.12);
+  color: #2ee6c5;
+}
+
+main {
+  padding: 40px;
+}
