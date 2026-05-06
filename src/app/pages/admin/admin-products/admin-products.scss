@@ -8,21 +8,14 @@
 
 .badge {
   display: inline-block;
-
   padding: 10px 18px;
-
   border-radius: 999px;
-
   background: rgba(46, 230, 197, 0.12);
-
   border: 1px solid rgba(46, 230, 197, 0.2);
-
   color: #2ee6c5;
-
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 1px;
-
   margin-bottom: 18px;
 }
 
@@ -37,13 +30,9 @@ p {
 
 .card {
   background: rgba(255, 255, 255, 0.04);
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   border-radius: 28px;
-
   padding: 32px;
-
   margin-bottom: 40px;
 }
 
@@ -53,9 +42,7 @@ p {
 
 .grid {
   display: grid;
-
   grid-template-columns: repeat(2, 1fr);
-
   gap: 18px;
 }
 
@@ -69,7 +56,8 @@ p {
   gap: 10px;
 }
 
-.field label {
+.field label,
+.check {
   color: #dce7e8;
   font-size: 0.95rem;
   font-weight: 600;
@@ -78,21 +66,13 @@ p {
 input,
 textarea {
   width: calc(100% - 32px);
-
   background: #0c2327;
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   color: white;
-
   border-radius: 16px;
-
   padding: 16px;
-
   font-size: 1rem;
-
   outline: none;
-
   transition: 0.2s;
 }
 
@@ -104,25 +84,32 @@ textarea {
 input:focus,
 textarea:focus {
   border-color: #2ee6c5;
-
   box-shadow: 0 0 0 4px rgba(46, 230, 197, 0.12);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.check input {
+  width: auto;
+  margin: 0;
 }
 
 button {
   border: none;
-
   border-radius: 16px;
-
   padding: 14px 20px;
-
   background: linear-gradient(135deg, #2ee6c5, #18b89b);
-
   color: #041214;
-
   font-weight: 800;
-
   cursor: pointer;
-
   transition: 0.2s;
 }
 
@@ -136,31 +123,33 @@ button:hover {
 
 .products-grid {
   display: grid;
-
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 24px;
 }
 
 .product-card {
   background: rgba(255, 255, 255, 0.04);
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   border-radius: 24px;
-
   padding: 20px;
 }
 
 .product-card img {
   width: 100%;
   height: 260px;
-
   object-fit: cover;
-
   border-radius: 18px;
-
   margin-bottom: 20px;
+}
+
+.product-card h3 {
+  font-size: 1.35rem;
+  margin-bottom: 12px;
+}
+
+.product-card p {
+  margin-bottom: 8px;
+  line-height: 1.5;
 }
 
 .price {
@@ -172,7 +161,6 @@ button:hover {
 .actions {
   display: flex;
   gap: 12px;
-
   margin-top: 20px;
 }
 
@@ -182,13 +170,11 @@ button:hover {
 
 .danger {
   background: rgba(255, 80, 80, 0.16);
-
   color: #ffb3b3;
 }
 
 .secondary {
   background: rgba(255, 255, 255, 0.08);
-
   color: white;
 }
 
@@ -200,15 +186,10 @@ button:hover {
 
 .error {
   margin-top: 20px;
-
   padding: 16px;
-
   border-radius: 16px;
-
   background: rgba(255, 80, 80, 0.12);
-
   border: 1px solid rgba(255, 80, 80, 0.2);
-
   color: #ffb3b3;
 }
 
@@ -227,5 +208,9 @@ button:hover {
 
   .card {
     padding: 24px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
   }
 }

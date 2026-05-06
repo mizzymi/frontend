@@ -32,7 +32,7 @@ export class AdminService {
 
     createProduct(data: FormData) {
         return this.http.post(
-            `${this.apiUrl}/products/with-images`,
+            `${this.apiUrl}/products/`,
             data,
             this.getHeaders()
         );

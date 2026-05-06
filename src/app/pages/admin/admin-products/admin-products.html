@@ -13,29 +13,78 @@
     <h2>Añadir producto</h2>
 
     <div class="grid">
-      <input name="name" placeholder="Nombre" [(ngModel)]="formData.name" required />
+      <div class="field">
+        <label>Nombre</label>
+        <input name="name" placeholder="Nombre" [(ngModel)]="formData.name" required />
+      </div>
 
-      <input
-        name="price"
-        type="number"
-        placeholder="Precio"
-        [(ngModel)]="formData.price"
-        required
-      />
+      <div class="field">
+        <label>Slug</label>
+        <input name="slug" placeholder="reimii-producto-ejemplo" [(ngModel)]="formData.slug" />
+      </div>
 
-      <input name="stock" type="number" placeholder="Stock" [(ngModel)]="formData.stock" required />
+      <div class="field">
+        <label>Precio (€)</label>
+        <input
+          name="price"
+          type="number"
+          placeholder="Precio"
+          [(ngModel)]="formData.price"
+          required
+        />
+      </div>
 
-      <input name="category" placeholder="Categoría" [(ngModel)]="formData.category" />
+      <div class="field">
+        <label>Stock</label>
+        <input
+          name="stock"
+          type="number"
+          placeholder="Stock"
+          [(ngModel)]="formData.stock"
+          required
+        />
+      </div>
 
-      <textarea
-        class="full"
-        name="description"
-        placeholder="Descripción"
-        [(ngModel)]="formData.description"
-      ></textarea>
+      <div class="field">
+        <label>Categoría</label>
+        <input name="category" placeholder="Categoría" [(ngModel)]="formData.category" />
+      </div>
 
-      <div class="full">
-        <label> Imágenes del producto </label>
+      <div class="field">
+        <label>Colores</label>
+        <input
+          name="colors"
+          placeholder="Negro + Dorado, Negro + Blanco, Custom"
+          [(ngModel)]="formData.colors"
+        />
+      </div>
+
+      <div class="field">
+        <label>Tamaños</label>
+        <input name="sizes" placeholder="Único, S, M, L" [(ngModel)]="formData.sizes" />
+      </div>
+
+      <label class="check">
+        <input type="checkbox" name="customizable" [(ngModel)]="formData.customizable" />
+        Personalizable
+      </label>
+
+      <label class="check">
+        <input type="checkbox" name="featured" [(ngModel)]="formData.featured" />
+        Destacado
+      </label>
+
+      <div class="field full">
+        <label>Descripción</label>
+        <textarea
+          name="description"
+          placeholder="Descripción"
+          [(ngModel)]="formData.description"
+        ></textarea>
+      </div>
+
+      <div class="field full">
+        <label>Imágenes del producto</label>
 
         <input type="file" multiple accept="image/*" (change)="onImagesSelected($event)" />
       </div>
@@ -64,13 +113,38 @@
         </p>
 
         <p>
-          Stock:
+          <strong>Slug:</strong>
+          {{ product.slug || '-' }}
+        </p>
+
+        <p>
+          <strong>Stock:</strong>
           {{ product.stock }}
         </p>
 
         <p>
-          Categoría:
+          <strong>Categoría:</strong>
           {{ product.category || '-' }}
+        </p>
+
+        <p>
+          <strong>Colores:</strong>
+          {{ product.colors?.join(', ') || '-' }}
+        </p>
+
+        <p>
+          <strong>Tamaños:</strong>
+          {{ product.sizes?.join(', ') || '-' }}
+        </p>
+
+        <p>
+          <strong>Personalizable:</strong>
+          {{ product.customizable ? 'Sí' : 'No' }}
+        </p>
+
+        <p>
+          <strong>Destacado:</strong>
+          {{ product.featured ? 'Sí' : 'No' }}
         </p>
 
         <div class="actions">
@@ -82,32 +156,56 @@
 
       <div *ngIf="editingProduct?._id === product._id" class="edit-box">
         <div class="field">
-          <label> Nombre del producto </label>
-
+          <label>Nombre del producto</label>
           <input name="editName" [(ngModel)]="editForm.name" placeholder="Nombre" />
         </div>
 
         <div class="field">
-          <label> Precio (€) </label>
+          <label>Slug</label>
+          <input name="editSlug" [(ngModel)]="editForm.slug" placeholder="Slug" />
+        </div>
 
+        <div class="field">
+          <label>Precio (€)</label>
           <input name="editPrice" type="number" [(ngModel)]="editForm.price" placeholder="Precio" />
         </div>
 
         <div class="field">
-          <label> Stock </label>
-
+          <label>Stock</label>
           <input name="editStock" type="number" [(ngModel)]="editForm.stock" placeholder="Stock" />
         </div>
 
         <div class="field">
-          <label> Categoría </label>
-
+          <label>Categoría</label>
           <input name="editCategory" [(ngModel)]="editForm.category" placeholder="Categoría" />
         </div>
 
         <div class="field">
-          <label> Descripción </label>
+          <label>Colores</label>
+          <input
+            name="editColors"
+            [(ngModel)]="editForm.colors"
+            placeholder="Negro + Dorado, Negro + Blanco, Custom"
+          />
+        </div>
 
+        <div class="field">
+          <label>Tamaños</label>
+          <input name="editSizes" [(ngModel)]="editForm.sizes" placeholder="Único, S, M, L" />
+        </div>
+
+        <label class="check">
+          <input type="checkbox" name="editCustomizable" [(ngModel)]="editForm.customizable" />
+          Personalizable
+        </label>
+
+        <label class="check">
+          <input type="checkbox" name="editFeatured" [(ngModel)]="editForm.featured" />
+          Destacado
+        </label>
+
+        <div class="field">
+          <label>Descripción</label>
           <textarea
             name="editDescription"
             [(ngModel)]="editForm.description"
