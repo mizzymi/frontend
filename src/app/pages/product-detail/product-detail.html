@@ -54,6 +54,16 @@
           </select>
         </label>
 
+        <label *ngIf="product.customizable">
+          Personalización
+
+          <input
+            type="text"
+            placeholder="Ejemplo: nombre, texto, color especial..."
+            [(ngModel)]="customText"
+          />
+        </label>
+
         <label>
           Cantidad
           <input type="number" min="1" [max]="product.stock" [(ngModel)]="quantity" />

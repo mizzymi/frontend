@@ -18,6 +18,7 @@ export class ProductDetail implements OnInit {
   loading = true;
   error = '';
 
+  customText = '';
   selectedImage = '';
   selectedColor = '';
   selectedSize = '';
@@ -61,7 +62,8 @@ export class ProductDetail implements OnInit {
       this.product,
       this.quantity,
       this.selectedColor,
-      this.selectedSize
+      this.selectedSize,
+      this.customText
     );
 
     this.added = true;

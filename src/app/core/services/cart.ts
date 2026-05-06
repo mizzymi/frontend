@@ -13,7 +13,7 @@ export class CartService {
 
   cart$ = this.cartSubject.asObservable();
 
-  addToCart(product: Product, quantity = 1, color?: string, size?: string): void {
+  addToCart(product: Product, quantity = 1, color?: string, size?: string, customText?: string): void {
     const cart = [...this.cartSubject.value];
 
     const existingItem = cart.find(
