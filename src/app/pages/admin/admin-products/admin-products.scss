@@ -193,6 +193,45 @@ button:hover {
   color: #ffb3b3;
 }
 
+.edit-images {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.edit-image {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(20, 184, 166, 0.25);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+
+  img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+}
+
+.image-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  button {
+    width: auto;
+    padding: 0.5rem 0.8rem;
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;

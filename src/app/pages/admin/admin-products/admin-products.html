@@ -1,7 +1,7 @@
 <section class="products-page">
   <div class="header">
     <div>
-      <span class="badge"> ADMIN PRODUCTOS </span>
+      <span class="badge">ADMIN PRODUCTOS</span>
 
       <h1>Gestión de productos</h1>
 
@@ -85,7 +85,6 @@
 
       <div class="field full">
         <label>Imágenes del producto</label>
-
         <input type="file" multiple accept="image/*" (change)="onImagesSelected($event)" />
       </div>
     </div>
@@ -104,52 +103,22 @@
       <img *ngIf="product.images?.length" [src]="product.images[0]" />
 
       <div *ngIf="editingProduct?._id !== product._id">
-        <h3>
-          {{ product.name }}
-        </h3>
+        <h3>{{ product.name }}</h3>
 
         <p class="price">
           {{ product.price | currency: 'EUR' }}
         </p>
 
-        <p>
-          <strong>Slug:</strong>
-          {{ product.slug || '-' }}
-        </p>
-
-        <p>
-          <strong>Stock:</strong>
-          {{ product.stock }}
-        </p>
-
-        <p>
-          <strong>Categoría:</strong>
-          {{ product.category || '-' }}
-        </p>
-
-        <p>
-          <strong>Colores:</strong>
-          {{ product.colors?.join(', ') || '-' }}
-        </p>
-
-        <p>
-          <strong>Tamaños:</strong>
-          {{ product.sizes?.join(', ') || '-' }}
-        </p>
-
-        <p>
-          <strong>Personalizable:</strong>
-          {{ product.customizable ? 'Sí' : 'No' }}
-        </p>
-
-        <p>
-          <strong>Destacado:</strong>
-          {{ product.featured ? 'Sí' : 'No' }}
-        </p>
+        <p><strong>Slug:</strong> {{ product.slug || '-' }}</p>
+        <p><strong>Stock:</strong> {{ product.stock }}</p>
+        <p><strong>Categoría:</strong> {{ product.category || '-' }}</p>
+        <p><strong>Colores:</strong> {{ product.colors?.join(', ') || '-' }}</p>
+        <p><strong>Tamaños:</strong> {{ product.sizes?.join(', ') || '-' }}</p>
+        <p><strong>Personalizable:</strong> {{ product.customizable ? 'Sí' : 'No' }}</p>
+        <p><strong>Destacado:</strong> {{ product.featured ? 'Sí' : 'No' }}</p>
 
         <div class="actions">
           <button type="button" (click)="startEdit(product)">Editar</button>
-
           <button type="button" class="danger" (click)="removeProduct(product)">Eliminar</button>
         </div>
       </div>
@@ -213,9 +182,44 @@
           ></textarea>
         </div>
 
+        <div class="field">
+          <label>Imágenes actuales</label>
+
+          <div class="edit-images" *ngIf="editImages.length">
+            <div class="edit-image" *ngFor="let image of editImages; let i = index">
+              <img [src]="image" />
+
+              <div class="image-actions">
+                <button type="button" (click)="moveImageUp(i)" [disabled]="i === 0">↑</button>
+
+                <button
+                  type="button"
+                  (click)="moveImageDown(i)"
+                  [disabled]="i === editImages.length - 1"
+                >
+                  ↓
+                </button>
+
+                <button type="button" class="danger" (click)="removeEditImage(i)">Eliminar</button>
+              </div>
+            </div>
+          </div>
+
+          <p *ngIf="!editImages.length">Sin imágenes actuales.</p>
+        </div>
+
+        <div class="field">
+          <label>Añadir nuevas imágenes</label>
+
+          <input type="file" multiple accept="image/*" (change)="onEditImagesSelected($event)" />
+
+          <p *ngIf="newEditImages.length">
+            {{ newEditImages.length }} imagen/es nueva/s seleccionada/s.
+          </p>
+        </div>
+
         <div class="actions">
           <button type="button" (click)="saveEdit()">Guardar</button>
-
           <button type="button" class="secondary" (click)="cancelEdit()">Cancelar</button>
         </div>
       </div>

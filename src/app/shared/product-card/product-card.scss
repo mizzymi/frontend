@@ -99,3 +99,29 @@ p {
   font-weight: 800;
   font-size: 13px;
 }
+
+.small {
+  display: block;
+
+  @media (max-width: 920px) {
+    display: none;
+  }
+}
+
+@media (max-width: 920px) {
+  img {
+    height: 220px;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .bottom strong {
+    font-size: 18px;
+  }
+}

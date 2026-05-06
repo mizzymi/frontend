@@ -1,34 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  NgFor,
-  NgIf,
-  CurrencyPipe
-} from '@angular/common';
-
+import { NgFor, NgIf, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { AdminService } from '../../../core/services/admin';
 
 @Component({
   selector: 'app-admin-products',
-  imports: [
-    NgFor,
-    NgIf,
-    FormsModule,
-    CurrencyPipe
-  ],
+  imports: [NgFor, NgIf, FormsModule, CurrencyPipe],
   templateUrl: './admin-products.html',
   styleUrl: './admin-products.scss'
 })
 export class AdminProducts implements OnInit {
-
   products: any[] = [];
 
   loading = true;
   errorMessage = '';
 
   selectedImages: File[] = [];
+
   editingProduct: any = null;
+  editImages: string[] = [];
+  newEditImages: File[] = [];
 
   formData = {
     name: '',
@@ -56,9 +48,7 @@ export class AdminProducts implements OnInit {
     featured: false
   };
 
-  constructor(
-    private adminService: AdminService
-  ) { }
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -88,6 +78,34 @@ export class AdminProducts implements OnInit {
     this.selectedImages = Array.from(input.files);
   }
 
+  onEditImagesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files) return;
+
+    this.newEditImages = Array.from(input.files);
+  }
+
+  removeEditImage(index: number): void {
+    this.editImages.splice(index, 1);
+  }
+
+  moveImageUp(index: number): void {
+    if (index === 0) return;
+
+    const temp = this.editImages[index - 1];
+    this.editImages[index - 1] = this.editImages[index];
+    this.editImages[index] = temp;
+  }
+
+  moveImageDown(index: number): void {
+    if (index === this.editImages.length - 1) return;
+
+    const temp = this.editImages[index + 1];
+    this.editImages[index + 1] = this.editImages[index];
+    this.editImages[index] = temp;
+  }
+
   private toArray(value: string): string[] {
     return value
       .split(',')
@@ -107,15 +125,8 @@ export class AdminProducts implements OnInit {
     data.append('stock', String(Number(this.formData.stock)));
     data.append('category', this.formData.category);
 
-    data.append(
-      'colors',
-      JSON.stringify(this.toArray(this.formData.colors))
-    );
-
-    data.append(
-      'sizes',
-      JSON.stringify(this.toArray(this.formData.sizes))
-    );
+    data.append('colors', JSON.stringify(this.toArray(this.formData.colors)));
+    data.append('sizes', JSON.stringify(this.toArray(this.formData.sizes)));
 
     data.append('customizable', String(this.formData.customizable));
     data.append('featured', String(this.formData.featured));
@@ -153,13 +164,15 @@ export class AdminProducts implements OnInit {
 
   startEdit(product: any): void {
     this.editingProduct = product;
+    this.editImages = [...(product.images || [])];
+    this.newEditImages = [];
 
     this.editForm = {
       name: product.name || '',
       slug: product.slug || '',
       description: product.description || '',
-      price: product.price || '',
-      stock: product.stock || '',
+      price: String(product.price ?? ''),
+      stock: String(product.stock ?? ''),
       category: product.category || '',
       colors: product.colors?.join(', ') || '',
       sizes: product.sizes?.join(', ') || '',
@@ -170,6 +183,8 @@ export class AdminProducts implements OnInit {
 
   cancelEdit(): void {
     this.editingProduct = null;
+    this.editImages = [];
+    this.newEditImages = [];
   }
 
   saveEdit(): void {
@@ -177,25 +192,35 @@ export class AdminProducts implements OnInit {
 
     this.errorMessage = '';
 
-    const payload = {
-      name: this.editForm.name,
-      slug: this.editForm.slug,
-      description: this.editForm.description,
-      price: Number(this.editForm.price),
-      stock: Number(this.editForm.stock),
-      category: this.editForm.category,
-      colors: this.toArray(this.editForm.colors),
-      sizes: this.toArray(this.editForm.sizes),
-      customizable: this.editForm.customizable,
-      featured: this.editForm.featured
-    };
+    const data = new FormData();
+
+    data.append('name', this.editForm.name);
+    data.append('slug', this.editForm.slug);
+    data.append('description', this.editForm.description);
+    data.append('price', String(Number(this.editForm.price)));
+    data.append('stock', String(Number(this.editForm.stock)));
+    data.append('category', this.editForm.category);
+
+    data.append('colors', JSON.stringify(this.toArray(this.editForm.colors)));
+    data.append('sizes', JSON.stringify(this.toArray(this.editForm.sizes)));
+
+    data.append('customizable', String(this.editForm.customizable));
+    data.append('featured', String(this.editForm.featured));
+
+    data.append('existingImages', JSON.stringify(this.editImages));
+
+    this.newEditImages.forEach(file => {
+      data.append('images', file);
+    });
 
     this.adminService.updateProduct(
       this.editingProduct._id,
-      payload
+      data
     ).subscribe({
       next: () => {
         this.editingProduct = null;
+        this.editImages = [];
+        this.newEditImages = [];
         this.loadProducts();
       },
       error: err => {
@@ -208,9 +233,7 @@ export class AdminProducts implements OnInit {
   }
 
   removeProduct(product: any): void {
-    const confirmed = confirm(
-      `¿Eliminar "${product.name}"?`
-    );
+    const confirmed = confirm(`¿Eliminar "${product.name}"?`);
 
     if (!confirmed) return;
 
