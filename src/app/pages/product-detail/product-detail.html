@@ -1,0 +1,74 @@
+<section class="product-detail">
+  <p *ngIf="loading" class="state">Cargando producto...</p>
+  <p *ngIf="error" class="state error">{{ error }}</p>
+
+  <div class="layout" *ngIf="product && !loading">
+    <div class="gallery">
+      <img
+        class="main-image"
+        [src]="selectedImage || 'https://placehold.co/900x900?text=REIMII+3D'"
+        [alt]="product.name"
+      />
+
+      <div class="thumbs" *ngIf="product.images.length > 1">
+        <button
+          type="button"
+          *ngFor="let image of product.images"
+          [class.active]="selectedImage === image"
+          (click)="selectedImage = image"
+        >
+          <img [src]="image" [alt]="product.name" />
+        </button>
+      </div>
+    </div>
+
+    <aside class="info">
+      <a routerLink="/shop" class="back">← Volver a tienda</a>
+
+      <p class="category">{{ product.category }}</p>
+
+      <h1>{{ product.name }}</h1>
+
+      <p class="description">{{ product.description }}</p>
+
+      <strong class="price">
+        {{ product.price | currency: 'EUR' }}
+      </strong>
+
+      <div class="options">
+        <label *ngIf="product.colors.length">
+          Color
+          <select [(ngModel)]="selectedColor">
+            <option *ngFor="let color of product.colors" [value]="color">
+              {{ color }}
+            </option>
+          </select>
+        </label>
+
+        <label *ngIf="product.sizes.length">
+          Tamaño
+          <select [(ngModel)]="selectedSize">
+            <option *ngFor="let size of product.sizes" [value]="size">
+              {{ size }}
+            </option>
+          </select>
+        </label>
+
+        <label>
+          Cantidad
+          <input type="number" min="1" [max]="product.stock" [(ngModel)]="quantity" />
+        </label>
+      </div>
+
+      <p class="stock" *ngIf="product.stock > 0">Stock disponible: {{ product.stock }}</p>
+
+      <p class="no-stock" *ngIf="product.stock <= 0">Sin stock</p>
+
+      <button type="button" class="add-btn" [disabled]="product.stock <= 0" (click)="addToCart()">
+        Añadir al carrito
+      </button>
+
+      <p class="added" *ngIf="added">Producto añadido al carrito ✅</p>
+    </aside>
+  </div>
+</section>

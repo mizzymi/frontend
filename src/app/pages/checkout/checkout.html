@@ -1,0 +1,121 @@
+<section class="checkout">
+  <div class="header">
+    <p>Checkout</p>
+    <h1>Finalizar compra</h1>
+  </div>
+
+  <div class="empty" *ngIf="items.length === 0">
+    <h2>Carrito vacío</h2>
+    <a routerLink="/shop">Ir a tienda</a>
+  </div>
+
+  <div class="layout" *ngIf="items.length > 0">
+    <form class="form" (ngSubmit)="pay()">
+      <h2>Datos del cliente</h2>
+
+      <label>
+        Nombre
+        <input type="text" [(ngModel)]="customerName" name="name" required />
+      </label>
+
+      <label>
+        Email
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </label>
+
+      <label>
+        Teléfono
+        <input type="tel" [(ngModel)]="phone" name="phone" />
+      </label>
+
+      <h2>Dirección de envío</h2>
+
+      <label>
+        Nombre del destinatario
+        <input
+          type="text"
+          name="shippingFullName"
+          [(ngModel)]="shippingAddress.fullName"
+          required
+        />
+      </label>
+
+      <label>
+        Dirección
+        <input
+          type="text"
+          name="addressLine1"
+          [(ngModel)]="shippingAddress.addressLine1"
+          required
+        />
+      </label>
+
+      <label>
+        Piso, puerta, detalles
+        <input type="text" name="addressLine2" [(ngModel)]="shippingAddress.addressLine2" />
+      </label>
+
+      <div class="form-grid">
+        <label>
+          Ciudad
+          <input type="text" name="city" [(ngModel)]="shippingAddress.city" required />
+        </label>
+
+        <label>
+          Provincia
+          <input type="text" name="province" [(ngModel)]="shippingAddress.province" required />
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          Código postal
+          <input type="text" name="postalCode" [(ngModel)]="shippingAddress.postalCode" required />
+        </label>
+
+        <label>
+          País
+          <input type="text" name="country" [(ngModel)]="shippingAddress.country" required />
+        </label>
+      </div>
+
+      <p class="shipping-note">Envío gratis en pedidos superiores a 100€.</p>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+
+      <button type="submit" [disabled]="loading">
+        {{ loading ? 'Redirigiendo...' : 'Pagar con Stripe' }}
+      </button>
+    </form>
+
+    <aside class="summary">
+      <h2>Resumen</h2>
+
+      <div class="item" *ngFor="let item of items">
+        <p>{{ item.product.name }} x{{ item.quantity }}</p>
+        <strong>{{ item.product.price * item.quantity | currency: 'EUR' }}</strong>
+      </div>
+
+      <hr />
+
+      <div class="item">
+        <p>Subtotal</p>
+        <strong>{{ total | currency: 'EUR' }}</strong>
+      </div>
+
+      <div class="item">
+        <p>Envío</p>
+        <strong>
+          {{ calculateShipping() === 0 ? 'Gratis' : (calculateShipping() | currency: 'EUR') }}
+        </strong>
+      </div>
+
+      <hr />
+
+      <div class="total">
+        <span>Total</span>
+        <strong>{{ getFinalTotal() | currency: 'EUR' }}</strong>
+      </div>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,73 @@
+<section class="cart-page">
+  <div class="header">
+    <p>Carrito</p>
+    <h1>Resumen de compra</h1>
+  </div>
+
+  <div class="empty" *ngIf="items.length === 0">
+    <h2>Tu carrito está vacío</h2>
+    <p>Añade alguna pieza de Reimii 3D para continuar.</p>
+    <a routerLink="/shop">Explorar tienda</a>
+  </div>
+
+  <div class="layout" *ngIf="items.length > 0">
+    <div class="items">
+      <article class="item" *ngFor="let item of items">
+        <img
+          [src]="item.product.images?.[0] || 'https://placehold.co/300x300?text=3D'"
+          [alt]="item.product.name"
+        />
+
+        <div class="info">
+          <h3>{{ item.product.name }}</h3>
+
+          <p>
+            <span *ngIf="item.color">Color: {{ item.color }}</span>
+            <span *ngIf="item.size">Tamaño: {{ item.size }}</span>
+          </p>
+
+          <strong>{{ item.product.price | currency: 'EUR' }}</strong>
+        </div>
+
+        <div class="actions">
+          <label>Cantidad</label>
+
+          <input
+            type="number"
+            min="1"
+            [max]="item.product.stock"
+            [value]="item.quantity"
+            (change)="updateQuantity(item, $event)"
+          />
+
+          <button type="button" (click)="removeItem(item)">Eliminar</button>
+        </div>
+      </article>
+    </div>
+
+    <aside class="summary">
+      <h2>Total</h2>
+
+      <div class="line">
+        <span>Subtotal</span>
+        <strong>{{ total | currency: 'EUR' }}</strong>
+      </div>
+
+      <div class="line muted">
+        <span>Envío</span>
+        <strong>A calcular</strong>
+      </div>
+
+      <hr />
+
+      <div class="line total">
+        <span>Total</span>
+        <strong>{{ total | currency: 'EUR' }}</strong>
+      </div>
+
+      <a routerLink="/checkout" class="checkout-btn"> Continuar al pago </a>
+
+      <button type="button" class="clear-btn" (click)="clearCart()">Vaciar carrito</button>
+    </aside>
+  </div>
+</section>

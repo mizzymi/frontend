@@ -1,0 +1,34 @@
+<section class="hero">
+  <div class="hero-content">
+    <p class="eyebrow">REIMII 3D</p>
+
+    <h1>
+      Diseño e impresión 3D
+      <span>de alta calidad</span>
+    </h1>
+
+    <p class="description">Piezas únicas para gaming, decoración y proyectos personalizados.</p>
+
+    <div class="actions">
+      <a routerLink="/shop" class="primary">Explorar productos</a>
+      <a routerLink="/custom" class="secondary">Encargo personalizado</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <img src="reimii-logo.png" />
+  </div>
+</section>
+
+<section class="featured">
+  <div class="header">
+    <p>Destacados</p>
+    <h2>Productos populares</h2>
+  </div>
+
+  <p *ngIf="loading" class="state">Cargando...</p>
+
+  <div class="grid" *ngIf="!loading">
+    <app-product-card *ngFor="let product of featuredProducts" [product]="product" />
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<section class="success">
+  <div class="card" *ngIf="loading">
+    <h1>Confirmando pago...</h1>
+    <p>Estamos verificando tu pedido.</p>
+  </div>
+
+  <div class="card" *ngIf="!loading">
+    <h1>Pago confirmado ✅</h1>
+
+    <p *ngIf="session">
+      Total pagado:
+      <strong>{{ session.amountTotal / 100 | currency: 'EUR' }}</strong>
+    </p>
+
+    <div class="order" *ngIf="order">
+      <p>Subtotal: {{ order.subtotal | currency: 'EUR' }}</p>
+      <p>
+        Envío: {{ order.shippingCost === 0 ? 'Gratis' : (order.shippingCost | currency: 'EUR') }}
+      </p>
+      <p>Total: {{ order.total | currency: 'EUR' }}</p>
+
+      <h2>Dirección de envío</h2>
+      <p>{{ order.shippingAddress.fullName }}</p>
+      <p>{{ order.shippingAddress.addressLine1 }}</p>
+      <p *ngIf="order.shippingAddress.addressLine2">
+        {{ order.shippingAddress.addressLine2 }}
+      </p>
+      <p>
+        {{ order.shippingAddress.postalCode }}, {{ order.shippingAddress.city }},
+        {{ order.shippingAddress.province }}
+      </p>
+      <p>{{ order.shippingAddress.country }}</p>
+    </div>
+
+    <a routerLink="/shop">Volver a tienda</a>
+  </div>
+</section>

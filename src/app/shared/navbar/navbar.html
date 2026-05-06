@@ -1,0 +1,12 @@
+<header class="navbar">
+  <a routerLink="/" class="logo">REIMII 3D</a>
+
+  <nav>
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/shop">Tienda</a>
+    <a routerLink="/cart" class="cart-link">
+      Carrito
+      <span *ngIf="cartCount > 0">{{ cartCount }}</span>
+    </a>
+  </nav>
+</header>

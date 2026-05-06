@@ -1,0 +1,12 @@
+<section class="shop">
+  <div class="header">
+    <p>Tienda</p>
+    <h1>Todos los productos</h1>
+  </div>
+
+  <p *ngIf="loading" class="state">Cargando...</p>
+
+  <div class="grid" *ngIf="!loading">
+    <app-product-card *ngFor="let product of products" [product]="product" />
+  </div>
+</section>
