@@ -25,11 +25,7 @@
     <aside class="info">
       <a routerLink="/shop" class="back">← Volver a tienda</a>
 
-      <p class="category">{{ product.category }}</p>
-
       <h1>{{ product.name }}</h1>
-
-      <p class="description">{{ product.description }}</p>
 
       <strong class="price">
         {{ product.price | currency: 'EUR' }}
@@ -79,6 +75,10 @@
       </button>
 
       <p class="added" *ngIf="added">Producto añadido al carrito ✅</p>
+    </aside>
+
+    <aside class="info">
+      <p class="description">{{ product.description }}</p>
     </aside>
   </div>
 </section>

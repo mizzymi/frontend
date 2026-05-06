@@ -7,11 +7,6 @@
   </a>
 
   <div class="content">
-    <div class="meta">
-      <span>{{ product.category }}</span>
-      <small *ngIf="product.customizable">Custom</small>
-    </div>
-
     <h3>
       <a [routerLink]="['/product', product._id]">
         {{ product.name }}
@@ -22,10 +17,6 @@
 
     <div class="bottom">
       <strong>{{ product.price | currency: 'EUR' }}</strong>
-
-      <span class="stock" *ngIf="product.stock > 0"> {{ product.stock }} uds </span>
-
-      <span class="no-stock" *ngIf="product.stock <= 0"> Sin stock </span>
     </div>
   </div>
 </article>
