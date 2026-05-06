@@ -3,6 +3,8 @@
   background: #0f172a;
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 22px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   transition:
     transform 0.25s ease,
@@ -30,6 +32,9 @@ img {
 
 .content {
   padding: 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .meta {
@@ -58,7 +63,7 @@ img {
 
 h3 {
   margin: 0 0 10px;
-  font-size: 21px;
+  font-size: 1.2rem;
   line-height: 1.2;
 
   a {
@@ -80,7 +85,8 @@ p {
   margin-top: 22px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
+  flex: 1;
 
   strong {
     color: #5eead4;
@@ -88,21 +94,9 @@ p {
   }
 }
 
-.stock {
-  color: #a7f3d0;
-  font-weight: 800;
-  font-size: 13px;
-}
-
-.no-stock {
-  color: #f87171;
-  font-weight: 800;
-  font-size: 13px;
-}
-
 .small {
   display: block;
-
+  
   @media (max-width: 920px) {
     display: none;
   }
