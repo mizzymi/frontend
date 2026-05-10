@@ -13,21 +13,24 @@
   <div class="layout" *ngIf="items.length > 0">
     <div class="items">
       <article class="item" *ngFor="let item of items">
-        <img
-          [src]="item.product.images?.[0] || 'https://placehold.co/300x300?text=3D'"
-          [alt]="item.product.name"
-        />
+        <a class="product-link" [routerLink]="['/product', item.product._id]">
+          <img
+            [src]="item.product.images?.[0] || 'https://placehold.co/300x300?text=3D'"
+            [alt]="item.product.name"
+          />
+        </a>
 
-        <div class="info">
+        <a class="info product-link" [routerLink]="['/product', item.product._id]">
           <h3>{{ item.product.name }}</h3>
 
-          <p>
+          <div class="details">
             <span *ngIf="item.color">Color: {{ item.color }}</span>
             <span *ngIf="item.size">Tamaño: {{ item.size }}</span>
-          </p>
+            <span *ngIf="item.customText">Personalización: {{ item.customText }}</span>
+          </div>
 
           <strong>{{ item.product.price | currency: 'EUR' }}</strong>
-        </div>
+        </a>
 
         <div class="actions">
           <label>Cantidad</label>

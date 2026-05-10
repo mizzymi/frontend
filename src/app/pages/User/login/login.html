@@ -1,0 +1,35 @@
+<section class="auth-page">
+  <form class="auth-card" (ngSubmit)="login()">
+    <span class="badge">REIMII 3D</span>
+
+    <h1>Iniciar sesión</h1>
+
+    <p>Accede a tu perfil, pedidos, carrito y productos guardados.</p>
+
+    <input
+      type="email"
+      name="email"
+      placeholder="Correo electrónico"
+      [(ngModel)]="email"
+      required
+    />
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Contraseña"
+      [(ngModel)]="password"
+      required
+    />
+
+    <p *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Entrando...' : 'Entrar' }}
+    </button>
+
+    <a routerLink="/register"> ¿No tienes cuenta? Crear cuenta </a>
+  </form>
+</section>

@@ -5,4 +5,5 @@ export interface CartItem {
     quantity: number;
     color?: string;
     size?: string;
+    customText?: string;
 }

@@ -72,7 +72,6 @@ export class AdminProducts implements OnInit {
 
   onImagesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-
     if (!input.files) return;
 
     this.selectedImages = Array.from(input.files);
@@ -80,7 +79,6 @@ export class AdminProducts implements OnInit {
 
   onEditImagesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-
     if (!input.files) return;
 
     this.newEditImages = Array.from(input.files);
@@ -106,7 +104,11 @@ export class AdminProducts implements OnInit {
     this.editImages[index] = temp;
   }
 
-  private toArray(value: string): string[] {
+  private toArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) {
+      return value.map(v => String(v).trim()).filter(Boolean);
+    }
+
     return value
       .split(',')
       .map(v => v.trim())
@@ -123,7 +125,8 @@ export class AdminProducts implements OnInit {
     data.append('description', this.formData.description);
     data.append('price', String(Number(this.formData.price)));
     data.append('stock', String(Number(this.formData.stock)));
-    data.append('category', this.formData.category);
+
+    data.append('category', JSON.stringify(this.toArray(this.formData.category)));
 
     data.append('colors', JSON.stringify(this.toArray(this.formData.colors)));
     data.append('sizes', JSON.stringify(this.toArray(this.formData.sizes)));
@@ -173,9 +176,19 @@ export class AdminProducts implements OnInit {
       description: product.description || '',
       price: String(product.price ?? ''),
       stock: String(product.stock ?? ''),
-      category: product.category || '',
-      colors: product.colors?.join(', ') || '',
-      sizes: product.sizes?.join(', ') || '',
+
+      category: Array.isArray(product.category)
+        ? product.category.join(', ')
+        : product.category || '',
+
+      colors: Array.isArray(product.colors)
+        ? product.colors.join(', ')
+        : product.colors || '',
+
+      sizes: Array.isArray(product.sizes)
+        ? product.sizes.join(', ')
+        : product.sizes || '',
+
       customizable: !!product.customizable,
       featured: !!product.featured
     };
@@ -199,7 +212,8 @@ export class AdminProducts implements OnInit {
     data.append('description', this.editForm.description);
     data.append('price', String(Number(this.editForm.price)));
     data.append('stock', String(Number(this.editForm.stock)));
-    data.append('category', this.editForm.category);
+
+    data.append('category', JSON.stringify(this.toArray(this.editForm.category)));
 
     data.append('colors', JSON.stringify(this.toArray(this.editForm.colors)));
     data.append('sizes', JSON.stringify(this.toArray(this.editForm.sizes)));

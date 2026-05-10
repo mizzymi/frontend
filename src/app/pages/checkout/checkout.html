@@ -30,6 +30,22 @@
 
       <h2>Dirección de envío</h2>
 
+      <label *ngIf="savedAddresses.length">
+        Dirección guardada
+
+        <select
+          name="savedAddress"
+          [(ngModel)]="selectedAddressId"
+          (change)="onSavedAddressChange()"
+        >
+          <option value="">Seleccionar dirección</option>
+
+          <option *ngFor="let address of savedAddresses" [value]="address._id">
+            {{ address.fullName }} — {{ address.street }}, {{ address.city }}
+          </option>
+        </select>
+      </label>
+
       <label>
         Nombre del destinatario
         <input
@@ -41,18 +57,13 @@
       </label>
 
       <label>
-        Dirección
-        <input
-          type="text"
-          name="addressLine1"
-          [(ngModel)]="shippingAddress.addressLine1"
-          required
-        />
+        Teléfono envío
+        <input type="tel" name="shippingPhone" [(ngModel)]="shippingAddress.phone" required />
       </label>
 
       <label>
-        Piso, puerta, detalles
-        <input type="text" name="addressLine2" [(ngModel)]="shippingAddress.addressLine2" />
+        Dirección
+        <input type="text" name="street" [(ngModel)]="shippingAddress.street" required />
       </label>
 
       <div class="form-grid">

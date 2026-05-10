@@ -31,7 +31,8 @@ export class Cart implements OnInit {
       item.product._id,
       quantity,
       item.color,
-      item.size
+      item.size,
+      item.customText
     );
   }
 
@@ -39,7 +40,8 @@ export class Cart implements OnInit {
     this.cartService.removeFromCart(
       item.product._id,
       item.color,
-      item.size
+      item.size,
+      item.customText
     );
   }
 

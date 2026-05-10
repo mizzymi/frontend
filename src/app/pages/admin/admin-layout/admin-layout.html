@@ -1,12 +1,20 @@
 <section class="admin-layout">
   <aside>
-    <h2>Reimii Admin</h2>
+    <div class="brand">
+      <h2>Reimii Admin</h2>
+      <button type="button" (click)="logout()">Salir</button>
+    </div>
 
     <nav>
-      <a routerLink="/admin">Dashboard</a>
-      <a routerLink="/admin/products">Productos</a>
-      <a routerLink="/admin/orders">Pedidos</a>
-      <a routerLink="/admin/customs">Customs</a>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Dashboard
+      </a>
+
+      <a routerLink="/admin/products" routerLinkActive="active"> Productos </a>
+
+      <a routerLink="/admin/orders" routerLinkActive="active"> Pedidos </a>
+
+      <a routerLink="/admin/customs" routerLinkActive="active"> Customs </a>
     </nav>
   </aside>
 

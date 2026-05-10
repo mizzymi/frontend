@@ -1,9 +1,11 @@
 export interface ShippingAddress {
+    _id?: string;
     fullName: string;
-    addressLine1: string;
-    addressLine2?: string;
+    phone: string;
+    street: string;
     city: string;
     province: string;
     postalCode: string;
     country: string;
+    isDefault: boolean;
 }

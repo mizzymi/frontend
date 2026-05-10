@@ -1,10 +1,21 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AdminAuthService } from '../../../core/services/admin-auth';
 
 @Component({
   selector: 'app-admin-layout',
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss'
 })
-export class AdminLayout { }
+export class AdminLayout {
+  constructor(
+    private adminAuthService: AdminAuthService,
+    private router: Router
+  ) { }
+
+  logout(): void {
+    this.adminAuthService.logout();
+    this.router.navigate(['/admin/login']);
+  }
+}

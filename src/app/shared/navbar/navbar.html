@@ -1,12 +1,41 @@
 <header class="navbar">
-  <a routerLink="/" class="logo">REIMII 3D</a>
+  <a routerLink="/" class="logo" (click)="closeMenu()">REIMII 3D</a>
 
-  <nav>
-    <a routerLink="/">Inicio</a>
-    <a routerLink="/shop">Tienda</a>
-    <a routerLink="/cart" class="cart-link">
+  <button
+    type="button"
+    class="hamburger"
+    [class.open]="menuOpen"
+    (click)="toggleMenu()"
+    aria-label="Abrir menú"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav [class.open]="menuOpen">
+    <a routerLink="/" (click)="closeMenu()">Inicio</a>
+    <a routerLink="/shop" (click)="closeMenu()">Tienda</a>
+
+    <a routerLink="/cart" class="cart-link" (click)="closeMenu()">
       Carrito
       <span *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
+
+    <button *ngIf="user" type="button" class="user-btn" (click)="goToProfile()">
+      <img *ngIf="user.profileImage" [src]="user.profileImage" [alt]="user.username || 'Usuario'" />
+
+      <span *ngIf="!user.profileImage" class="avatar-placeholder">
+        {{ user.username?.[0] || 'U' }}
+      </span>
+    </button>
+
+    <a *ngIf="!user" routerLink="/login" class="login-btn" (click)="closeMenu()">
+      Iniciar sesión
+    </a>
+
+    <button *ngIf="user" type="button" class="logout-mobile" (click)="logout()">
+      Cerrar sesión
+    </button>
   </nav>
 </header>

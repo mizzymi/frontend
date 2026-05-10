@@ -57,8 +57,53 @@
     color: #e2e8f0;
   }
 
+  label select {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px 16px;
+
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+
+    background: #0f172a;
+    color: #f8fafc;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    outline: none;
+
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
+
+    appearance: none;
+
+    background-image:
+      linear-gradient(45deg, transparent 50%, #5eead4 50%),
+      linear-gradient(135deg, #5eead4 50%, transparent 50%);
+
+    background-position:
+      calc(100% - 22px) calc(50% - 3px),
+      calc(100% - 16px) calc(50% - 3px);
+
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  label select:focus {
+    border-color: #14b8a6;
+
+    box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.12);
+  }
+
+  label select option {
+    background: #0f172a;
+    color: white;
+  }
+
   input {
-    
     width: calc(100% - 22px);
     margin-top: 7px;
     padding: 13px 14px;

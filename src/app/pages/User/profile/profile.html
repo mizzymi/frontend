@@ -1,0 +1,201 @@
+<section class="profile-page">
+  <div class="header">
+    <div>
+      <span class="badge">MI CUENTA</span>
+      <h1>Perfil</h1>
+      <p>Gestiona tu cuenta, pedidos, productos guardados y reseñas.</p>
+    </div>
+
+    <button type="button" class="logout" (click)="logout()">Cerrar sesión</button>
+  </div>
+
+  <p *ngIf="loading" class="state">Cargando perfil...</p>
+  <p *ngIf="errorMessage" class="state error">{{ errorMessage }}</p>
+
+  <div class="profile-grid" *ngIf="!loading && user">
+    <aside class="profile-card">
+      <img
+        class="avatar"
+        [src]="user.profileImage || 'https://placehold.co/300x300?text=REIMII'"
+        [alt]="user.username"
+      />
+
+      <h2>{{ user.name }}</h2>
+      <p>@{{ user.username }}</p>
+      <p>{{ user.email }}</p>
+
+      <form class="edit-form" (ngSubmit)="saveProfile()">
+        <input name="name" placeholder="Nombre" [(ngModel)]="editForm.name" />
+        <input name="username" placeholder="Username" [(ngModel)]="editForm.username" />
+        <input name="email" type="email" placeholder="Email" [(ngModel)]="editForm.email" />
+
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+
+        <button type="submit">Guardar cambios</button>
+      </form>
+    </aside>
+
+    <main class="profile-content">
+      <section class="panel">
+        <h2>Historial de pedidos</h2>
+
+        <div *ngIf="!orders.length" class="empty">Todavía no tienes pedidos.</div>
+
+        <article class="order-card" *ngFor="let order of orders">
+          <div class="order-top">
+            <div>
+              <h3>Pedido #{{ order._id }}</h3>
+              <p>{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+
+            <span class="status">{{ order.status }}</span>
+          </div>
+
+          <div class="items">
+            <div class="item" *ngFor="let item of order.items">
+              <span>{{ item.name }}</span>
+              <strong>x{{ item.quantity }}</strong>
+            </div>
+          </div>
+
+          <div class="order-total">
+            Total:
+            <strong>{{ order.total | currency: 'EUR' }}</strong>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Productos guardados</h2>
+
+        <div *ngIf="!savedProducts.length" class="empty">No tienes productos guardados.</div>
+
+        <div class="products-grid">
+          <article class="mini-product" *ngFor="let product of savedProducts">
+            <img [src]="product.images?.[0]" [alt]="product.name" />
+
+            <div>
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.price | currency: 'EUR' }}</p>
+              <a [routerLink]="['/product', product._id]">Ver producto</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Direcciones de envío</h2>
+
+        <div *ngIf="!user.shippingAddresses?.length" class="empty">
+          No tienes direcciones guardadas.
+        </div>
+
+        <article class="address-card" *ngFor="let address of user.shippingAddresses">
+          <div class="address-top">
+            <h3>{{ address.fullName }}</h3>
+
+            <span *ngIf="address.isDefault"> Principal </span>
+          </div>
+
+          <p>{{ address.street }}</p>
+
+          <p>
+            {{ address.postalCode }}
+            ·
+            {{ address.city }}
+          </p>
+
+          <p>{{ address.province }}</p>
+          <p>{{ address.country }}</p>
+          <p>{{ address.phone }}</p>
+        </article>
+
+        <form class="address-form" (ngSubmit)="addAddress()">
+          <h3>Añadir dirección</h3>
+
+          <div class="form-grid">
+            <input
+              type="text"
+              name="addressFullName"
+              placeholder="Nombre completo"
+              [(ngModel)]="addressForm.fullName"
+              required
+            />
+
+            <input
+              type="tel"
+              name="addressPhone"
+              placeholder="Teléfono"
+              [(ngModel)]="addressForm.phone"
+              required
+            />
+          </div>
+
+          <input
+            type="text"
+            name="addressStreet"
+            placeholder="Dirección"
+            [(ngModel)]="addressForm.street"
+            required
+          />
+
+          <div class="form-grid">
+            <input
+              type="text"
+              name="addressCity"
+              placeholder="Ciudad"
+              [(ngModel)]="addressForm.city"
+              required
+            />
+
+            <input
+              type="text"
+              name="addressProvince"
+              placeholder="Provincia"
+              [(ngModel)]="addressForm.province"
+              required
+            />
+          </div>
+
+          <div class="form-grid">
+            <input
+              type="text"
+              name="addressPostalCode"
+              placeholder="Código postal"
+              [(ngModel)]="addressForm.postalCode"
+              required
+            />
+
+            <input
+              type="text"
+              name="addressCountry"
+              placeholder="País"
+              [(ngModel)]="addressForm.country"
+              required
+            />
+          </div>
+
+          <label class="default-check">
+            <input type="checkbox" name="addressDefault" [(ngModel)]="addressForm.isDefault" />
+
+            Usar como dirección principal
+          </label>
+
+          <button type="submit">Guardar dirección</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Mis reseñas</h2>
+
+        <div *ngIf="!reviews.length" class="empty">No has escrito reseñas todavía.</div>
+
+        <article class="review-card" *ngFor="let review of reviews">
+          <h3>{{ review.product?.name }}</h3>
+          <p class="stars">★ {{ review.rating }}/5</p>
+          <p>{{ review.comment }}</p>
+        </article>
+      </section>
+    </main>
+  </div>
+</section>

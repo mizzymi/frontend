@@ -1,0 +1,45 @@
+<section class="auth-page">
+  <form class="auth-card" (ngSubmit)="register()">
+    <span class="badge">REIMII 3D</span>
+
+    <h1>Crear cuenta</h1>
+
+    <p>Guarda productos, revisa tus pedidos y personaliza tu experiencia.</p>
+
+    <input type="text" name="name" placeholder="Nombre" [(ngModel)]="name" required />
+
+    <input type="text" name="username" placeholder="Username" [(ngModel)]="username" required />
+
+    <input
+      type="email"
+      name="email"
+      placeholder="Correo electrónico"
+      [(ngModel)]="email"
+      required
+    />
+
+    <input
+      type="password"
+      name="password"
+      placeholder="Contraseña"
+      [(ngModel)]="password"
+      required
+    />
+
+    <div class="upload">
+      <label>Foto de perfil</label>
+
+      <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+    </div>
+
+    <p *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </p>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Creando cuenta...' : 'Crear cuenta' }}
+    </button>
+
+    <a routerLink="/login"> ¿Ya tienes cuenta? Iniciar sesión </a>
+  </form>
+</section>

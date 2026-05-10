@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpHeaders
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { CartItem } from '../../models/cart-item.model';
@@ -13,13 +16,27 @@ export class PaymentService {
 
   constructor(private http: HttpClient) { }
 
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return {};
+    }
+
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      })
+    };
+  }
+
   createCheckoutSession(data: {
     customerName: string;
     email: string;
     phone?: string;
     shippingAddress: ShippingAddress;
     items: CartItem[];
-  }): Observable<{ url: string }> {
+  }): Observable<any> {
     const payload = {
       customerName: data.customerName,
       email: data.email,
@@ -29,14 +46,21 @@ export class PaymentService {
         productId: item.product._id,
         quantity: item.quantity,
         color: item.color,
-        size: item.size
+        size: item.size,
+        customText: item.customText
       }))
     };
 
-    return this.http.post<{ url: string }>(`${this.apiUrl}/checkout`, payload);
+    return this.http.post<any>(
+      `${this.apiUrl}/checkout`,
+      payload,
+      this.getHeaders()
+    );
   }
 
   getSessionResult(sessionId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/session/${sessionId}`);
+    return this.http.get(
+      `${this.apiUrl}/session/${sessionId}`
+    );
   }
 }

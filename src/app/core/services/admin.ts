@@ -14,16 +14,9 @@ export class AdminService {
 
         return {
             headers: new HttpHeaders({
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token || ''}`
             })
         };
-    }
-
-    login(email: string, password: string) {
-        return this.http.post<any>(`${this.apiUrl}/auth/admin/login`, {
-            email,
-            password
-        });
     }
 
     getProducts() {
@@ -31,38 +24,40 @@ export class AdminService {
     }
 
     createProduct(data: FormData) {
-        return this.http.post(
-            `${this.apiUrl}/products/`,
-            data,
-            this.getHeaders()
-        );
+        return this.http.post(`${this.apiUrl}/products`, data, this.getHeaders());
     }
 
-    updateProduct(id: string, data: any) {
-        return this.http.put(
-            `${this.apiUrl}/products/${id}`,
-            data,
-            this.getHeaders()
-        );
+    updateProduct(id: string, data: FormData) {
+        return this.http.put(`${this.apiUrl}/products/${id}`, data, this.getHeaders());
     }
 
     deleteProduct(id: string) {
-        return this.http.delete(
-            `${this.apiUrl}/products/${id}`,
-            this.getHeaders()
-        );
+        return this.http.delete(`${this.apiUrl}/products/${id}`, this.getHeaders());
     }
 
     getOrders() {
-        return this.http.get<any[]>(
-            `${this.apiUrl}/orders`,
+        return this.http.get<any[]>(`${this.apiUrl}/orders`, this.getHeaders());
+    }
+
+    updateOrderStatus(orderId: string, status: string) {
+        return this.http.put(
+            `${this.apiUrl}/orders/${orderId}`,
+            { status },
             this.getHeaders()
         );
     }
 
     getCustomRequests() {
-        return this.http.get<any[]>(
-            `${this.apiUrl}/custom-requests`,
+        return this.http.get<any[]>(`${this.apiUrl}/custom-requests`, this.getHeaders());
+    }
+
+    deleteCustomRequest(id: string) {
+        return this.http.delete(`${this.apiUrl}/custom-requests/${id}`, this.getHeaders());
+    }
+
+    getStats() {
+        return this.http.get<any>(
+            `${this.apiUrl}/admin/stats`,
             this.getHeaders()
         );
     }

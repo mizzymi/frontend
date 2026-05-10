@@ -6,16 +6,24 @@
   color: white;
 }
 
+/* SIDEBAR */
+
 aside {
-  padding: 32px;
+  padding: 32px 20px;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   background: #071a1d;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 h2 {
   color: #2ee6c5;
   margin-bottom: 32px;
+  font-size: 1.5rem;
 }
+
+/* NAV */
 
 nav {
   display: flex;
@@ -29,13 +37,141 @@ a {
   padding: 14px 16px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 a:hover {
   background: rgba(46, 230, 197, 0.12);
   color: #2ee6c5;
+  transform: translateX(4px);
 }
+
+/* CONTENT */
 
 main {
   padding: 40px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 220px 1fr;
+  }
+
+  aside {
+    padding: 24px 16px;
+  }
+
+  main {
+    padding: 24px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  aside {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 18px 14px;
+  }
+
+  h2 {
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 4px;
+
+    scrollbar-width: none;
+  }
+
+  nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  a {
+    white-space: nowrap;
+    min-width: max-content;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    .brand {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 32px;
+
+      h2 {
+        margin: 0;
+      }
+
+      button {
+        border: 0;
+        border-radius: 10px;
+        padding: 8px 12px;
+        background: #ef4444;
+        color: white;
+        font-weight: 800;
+        cursor: pointer;
+      }
+    }
+
+    a.active {
+      background: rgba(46, 230, 197, 0.16);
+      color: #2ee6c5;
+    }
+    flex-shrink: 0;
+  }
+
+  main {
+    padding: 18px;
+  }
+}
+
+.brand {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 32px;
+
+  h2 {
+    margin: 0;
+  }
+
+  button {
+    border: 0;
+    border-radius: 10px;
+    padding: 8px 12px;
+    background: #ef4444;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+  }
+}
+
+a.active {
+  background: rgba(46, 230, 197, 0.16);
+  color: #2ee6c5;
 }

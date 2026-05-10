@@ -19,4 +19,24 @@ export class ProductService {
   getProductById(id: string): Observable<Product> {
     return this.http.get<Product>(`${this.apiUrl}/${id}`);
   }
+
+  addReview(
+    productId: string,
+    data: {
+      rating: number;
+      comment: string;
+    }
+  ) {
+    const token = localStorage.getItem('token');
+
+    return this.http.post(
+      `${this.apiUrl}/${productId}/reviews`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+  }
 }

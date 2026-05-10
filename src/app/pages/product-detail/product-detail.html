@@ -3,19 +3,43 @@
   <p *ngIf="error" class="state error">{{ error }}</p>
 
   <div class="layout" *ngIf="product && !loading">
-    <div class="gallery">
+    <div
+      class="gallery"
+      (wheel)="onImageWheel($event)"
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)"
+    >
+      <button
+        type="button"
+        class="carousel-btn left"
+        *ngIf="product.images.length > 1"
+        (click)="prevImage()"
+      >
+        ‹
+      </button>
+
       <img
         class="main-image"
         [src]="selectedImage || 'https://placehold.co/900x900?text=REIMII+3D'"
         [alt]="product.name"
+        (click)="openImageModal()"
       />
+
+      <button
+        type="button"
+        class="carousel-btn right"
+        *ngIf="product.images.length > 1"
+        (click)="nextImage()"
+      >
+        ›
+      </button>
 
       <div class="thumbs" *ngIf="product.images.length > 1">
         <button
           type="button"
-          *ngFor="let image of product.images"
+          *ngFor="let image of product.images; let i = index"
           [class.active]="selectedImage === image"
-          (click)="selectedImage = image"
+          (click)="selectImage(image, i)"
         >
           <img [src]="image" [alt]="product.name" />
         </button>
@@ -30,6 +54,11 @@
       <strong class="price">
         {{ product.price | currency: 'EUR' }}
       </strong>
+
+      <button type="button" class="like-btn" (click)="toggleLike()">
+        <span *ngIf="!isSaved">♡ Guardar producto</span>
+        <span *ngIf="isSaved">♥ Producto guardado</span>
+      </button>
 
       <div class="options">
         <label *ngIf="product.colors.length">
@@ -52,7 +81,6 @@
 
         <label *ngIf="product.customizable">
           Personalización
-
           <input
             type="text"
             placeholder="Ejemplo: nombre, texto, color especial..."
@@ -67,7 +95,6 @@
       </div>
 
       <p class="stock" *ngIf="product.stock > 0">Stock disponible: {{ product.stock }}</p>
-
       <p class="no-stock" *ngIf="product.stock <= 0">Sin stock</p>
 
       <button type="button" class="add-btn" [disabled]="product.stock <= 0" (click)="addToCart()">
@@ -80,5 +107,107 @@
     <aside class="info">
       <p class="description">{{ product.description }}</p>
     </aside>
+
+    <aside class="info">
+      <div class="reviews-header">
+        <div>
+          <h2>Reseñas</h2>
+
+          <p class="rating">
+            ★ {{ product.ratingAverage || 0 | number: '1.1-1' }}
+            <span>
+              ({{ product.ratingCount || 0 }}
+              reseñas)
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="empty" *ngIf="!product.reviews?.length">
+        Todavía no hay reseñas para este producto.
+      </div>
+
+      <div class="reviews-list" *ngIf="product.reviews?.length">
+        <article class="review-card" *ngFor="let review of product.reviews">
+          <div class="review-top">
+            <div class="review-user">
+              <img
+                [src]="review.profileImage || 'https://placehold.co/100x100?text=U'"
+                [alt]="review.username"
+              />
+
+              <div>
+                <strong>{{ review.username }}</strong>
+
+                <p>★ {{ review.rating }}/5</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="review-comment">
+            {{ review.comment }}
+          </p>
+        </article>
+      </div>
+
+      <form class="review-form" *ngIf="authService.isLoggedIn()" (ngSubmit)="submitReview()">
+        <h3>Escribir reseña</h3>
+
+        <label>
+          Puntuación
+
+          <select [(ngModel)]="reviewRating" name="reviewRating">
+            <option [value]="5">5 estrellas</option>
+            <option [value]="4">4 estrellas</option>
+            <option [value]="3">3 estrellas</option>
+            <option [value]="2">2 estrellas</option>
+            <option [value]="1">1 estrella</option>
+          </select>
+        </label>
+
+        <textarea
+          [(ngModel)]="reviewComment"
+          name="reviewComment"
+          placeholder="¿Qué te ha parecido el producto?"
+        ></textarea>
+
+        <button type="submit">Publicar reseña</button>
+      </form>
+    </aside>
+  </div>
+
+  <div
+    class="image-modal"
+    *ngIf="imageModalOpen"
+    (click)="closeImageModal()"
+    (wheel)="onImageWheel($event)"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)"
+  >
+    <button type="button" class="close-modal" (click)="closeImageModal()">×</button>
+
+    <button
+      type="button"
+      class="modal-arrow left"
+      *ngIf="product && product.images.length > 1"
+      (click)="prevImage(); $event.stopPropagation()"
+    >
+      ‹
+    </button>
+
+    <img
+      [src]="selectedImage || 'https://placehold.co/1200x1200?text=REIMII+3D'"
+      [alt]="product?.name"
+      (click)="$event.stopPropagation()"
+    />
+
+    <button
+      type="button"
+      class="modal-arrow right"
+      *ngIf="product && product.images.length > 1"
+      (click)="nextImage(); $event.stopPropagation()"
+    >
+      ›
+    </button>
   </div>
 </section>
