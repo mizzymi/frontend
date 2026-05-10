@@ -34,15 +34,21 @@
         ›
       </button>
 
-      <div class="thumbs" *ngIf="product.images.length > 1">
-        <button
-          type="button"
-          *ngFor="let image of product.images; let i = index"
-          [class.active]="selectedImage === image"
-          (click)="selectImage(image, i)"
-        >
-          <img [src]="image" [alt]="product.name" />
-        </button>
+      <div class="thumbs-wrapper" *ngIf="product.images.length > 1">
+        <button type="button" class="thumb-nav left" (click)="prevImage()">‹</button>
+
+        <div class="thumbs">
+          <button
+            type="button"
+            *ngFor="let image of product.images; let i = index"
+            [class.active]="selectedImage === image"
+            (click)="selectImage(image, i)"
+          >
+            <img [src]="image" [alt]="product.name" />
+          </button>
+        </div>
+
+        <button type="button" class="thumb-nav right" (click)="nextImage()">›</button>
       </div>
     </div>
 
