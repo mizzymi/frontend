@@ -456,8 +456,200 @@ h1 {
   font-weight: 900;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 900px) and (orientation: portrait) {
+  .product-detail {
+    padding: 32px 18px;
+  }
+
   .layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) and (max-width: 950px) {
+  .product-detail {
+    padding: 16px;
+  }
+
+  .layout {
+    max-width: 100%;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(300px, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+
+  .gallery {
+    position: sticky;
+    top: 16px;
+
+    .main-image {
+      max-height: 58vh;
+      border-radius: 18px;
+      object-fit: contain;
+    }
+  }
+
+  .carousel-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 32px;
+
+    &.left {
+      left: 8px;
+    }
+
+    &.right {
+      right: 8px;
+    }
+  }
+
+  .thumbs-wrapper {
+    margin-top: 10px;
+    grid-template-columns: 34px 1fr 34px;
+    gap: 8px;
+  }
+
+  .thumb-nav {
+    width: 34px;
+    height: 58px;
+    border-radius: 12px;
+    font-size: 26px;
+  }
+
+  .thumbs {
+    gap: 8px;
+    padding-bottom: 4px;
+
+    button {
+      width: 58px;
+      height: 58px;
+      border-radius: 10px;
+    }
+  }
+
+  .info {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .back {
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    font-size: clamp(24px, 4vw, 34px);
+    margin-bottom: 10px;
+  }
+
+  .price {
+    margin: 12px 0;
+    font-size: 26px;
+  }
+
+  .like-btn {
+    margin-bottom: 14px;
+    padding: 11px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .options {
+    gap: 10px;
+
+    select,
+    input {
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+  }
+
+  .stock,
+  .no-stock,
+  .added {
+    margin: 10px 0;
+    font-size: 0.9rem;
+  }
+
+  .add-btn {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .reviews-header {
+    margin-bottom: 14px;
+  }
+
+  .review-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .review-user {
+    img {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  .review-form {
+    margin-top: 18px;
+    gap: 12px;
+
+    select,
+    textarea {
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    textarea {
+      min-height: 90px;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 12px;
+    }
+  }
+
+  .image-modal {
+    padding: 12px;
+
+    img {
+      max-width: 88vw;
+      max-height: 84vh;
+      border-radius: 18px;
+    }
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    font-size: 26px;
+  }
+
+  .modal-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 30px;
+
+    &.left {
+      left: 12px;
+    }
+
+    &.right {
+      right: 12px;
+    }
   }
 }
