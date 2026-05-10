@@ -4,9 +4,24 @@
     <h1>Todos los productos</h1>
   </div>
 
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Buscar por nombre, categoría, color, tamaño..."
+      [(ngModel)]="searchTerm"
+      (input)="filterProducts()"
+    />
+
+    <button type="button" *ngIf="searchTerm" (click)="clearSearch()">Limpiar</button>
+  </div>
+
   <p *ngIf="loading" class="state">Cargando...</p>
 
-  <div class="grid" *ngIf="!loading">
-    <app-product-card *ngFor="let product of products" [product]="product" />
+  <p *ngIf="!loading && filteredProducts.length === 0" class="state">
+    No se encontraron productos.
+  </p>
+
+  <div class="grid" *ngIf="!loading && filteredProducts.length > 0">
+    <app-product-card *ngFor="let product of filteredProducts" [product]="product" />
   </div>
 </section>
