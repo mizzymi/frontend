@@ -13,15 +13,9 @@ import { ShippingAddress } from '../../models/shipping-address.model';
 
 @Component({
   selector: 'app-checkout',
-  imports: [
-    NgIf,
-    NgFor,
-    CurrencyPipe,
-    FormsModule,
-    RouterLink
-  ],
+  imports: [NgIf, NgFor, CurrencyPipe, FormsModule, RouterLink],
   templateUrl: './checkout.html',
-  styleUrl: './checkout.scss'
+  styleUrl: './checkout.scss',
 })
 export class Checkout implements OnInit {
   items: CartItem[] = [];
@@ -44,7 +38,7 @@ export class Checkout implements OnInit {
     province: '',
     postalCode: '',
     country: 'España',
-    isDefault: false
+    isDefault: false,
   };
 
   loading = false;
@@ -54,11 +48,11 @@ export class Checkout implements OnInit {
     private cartService: CartService,
     private paymentService: PaymentService,
     private userService: UserService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
-    this.cartService.cart$.subscribe(items => {
+    this.cartService.cart$.subscribe((items) => {
       this.items = items;
       this.total = this.cartService.getTotal();
     });
@@ -70,32 +64,28 @@ export class Checkout implements OnInit {
     if (!this.authService.isLoggedIn()) return;
 
     this.userService.getProfile().subscribe({
-      next: user => {
+      next: (user) => {
         this.user = user;
 
         this.customerName = user.name || '';
         this.email = user.email || '';
         this.phone = user.phone || '';
 
-        this.savedAddresses =
-          user.shippingAddresses || [];
+        this.savedAddresses = user.shippingAddresses || [];
 
         const defaultAddress =
-          this.savedAddresses.find(
-            (address: any) => address.isDefault
-          ) || this.savedAddresses[0];
+          this.savedAddresses.find((address: any) => address.isDefault) || this.savedAddresses[0];
 
         if (defaultAddress) {
-          this.selectedAddressId =
-            defaultAddress._id || '';
+          this.selectedAddressId = defaultAddress._id || '';
 
           this.applySavedAddress(defaultAddress);
         }
       },
 
-      error: err => {
+      error: (err) => {
         console.error(err);
-      }
+      },
     });
   }
 
@@ -108,17 +98,14 @@ export class Checkout implements OnInit {
       province: address.province || '',
       postalCode: address.postalCode || '',
       country: address.country || 'España',
-      isDefault: !!address.isDefault
+      isDefault: !!address.isDefault,
     };
 
-    this.phone =
-      address.phone || this.phone || '';
+    this.phone = address.phone || this.phone || '';
   }
 
   onSavedAddressChange(): void {
-    const address = this.savedAddresses.find(
-      item => item._id === this.selectedAddressId
-    );
+    const address = this.savedAddresses.find((item) => item._id === this.selectedAddressId);
 
     if (address) {
       this.applySavedAddress(address);
@@ -126,21 +113,36 @@ export class Checkout implements OnInit {
   }
 
   calculateShipping(): number {
-    if (this.total >= 100) return 0;
+    const normalizedCountry = this.shippingAddress.country.trim().toLowerCase();
 
-    const country =
-      this.shippingAddress.country
-        .trim()
-        .toLowerCase();
+    let totalWeight = 0;
 
-    if (
-      country === 'españa' ||
-      country === 'spain'
-    ) {
-      return 5.99;
+    for (const item of this.items) {
+      const quantity = Number(item.quantity || 1);
+      const weight = Number(item.product?.weight || 0);
+
+      totalWeight += weight * quantity;
     }
 
-    return 15.99;
+    const weightKg = totalWeight / 1000;
+
+    const isSpain = normalizedCountry === 'españa' || normalizedCountry === 'spain';
+
+    if (isSpain) {
+      if (weightKg <= 0.5) return 5.99;
+      if (weightKg <= 1) return 6.99;
+      if (weightKg <= 2) return 8.99;
+      if (weightKg <= 5) return 10.99;
+
+      return 14.99;
+    }
+
+    if (weightKg <= 0.5) return 15.99;
+    if (weightKg <= 1) return 16.99;
+    if (weightKg <= 2) return 20.99;
+    if (weightKg <= 5) return 28.99;
+
+    return 39.99;
   }
 
   getFinalTotal(): number {
@@ -151,8 +153,7 @@ export class Checkout implements OnInit {
     this.error = '';
 
     if (!this.customerName || !this.email) {
-      this.error =
-        'Nombre y email son obligatorios.';
+      this.error = 'Nombre y email son obligatorios.';
       return;
     }
 
@@ -165,8 +166,7 @@ export class Checkout implements OnInit {
       !this.shippingAddress.postalCode ||
       !this.shippingAddress.country
     ) {
-      this.error =
-        'La dirección de envío es obligatoria.';
+      this.error = 'La dirección de envío es obligatoria.';
       return;
     }
 
@@ -177,42 +177,39 @@ export class Checkout implements OnInit {
 
     this.loading = true;
 
-    this.paymentService.createCheckoutSession({
-      customerName: this.customerName,
-      email: this.email,
-      phone: this.phone,
+    this.paymentService
+      .createCheckoutSession({
+        customerName: this.customerName,
+        email: this.email,
+        phone: this.phone,
 
-      shippingAddress: this.shippingAddress,
+        shippingAddress: this.shippingAddress,
 
-      items: this.items
-    }).subscribe({
-      next: (res: any) => {
+        items: this.items,
+      })
+      .subscribe({
+        next: (res: any) => {
+          if (res.url) {
+            window.location.href = res.url;
+            return;
+          }
 
-        if (res.url) {
-          window.location.href = res.url;
-          return;
-        }
+          if (res.redirectUrl) {
+            window.location.href = res.redirectUrl;
 
-        if (res.redirectUrl) {
-          window.location.href =
-            res.redirectUrl;
+            return;
+          }
 
-          return;
-        }
+          this.error = 'No se recibió URL de pago.';
 
-        this.error =
-          'No se recibió URL de pago.';
+          this.loading = false;
+        },
 
-        this.loading = false;
-      },
+        error: (err) => {
+          this.error = err.error?.message || 'Error iniciando pago.';
 
-      error: err => {
-        this.error =
-          err.error?.message ||
-          'Error iniciando pago.';
-
-        this.loading = false;
-      }
-    });
+          this.loading = false;
+        },
+      });
   }
 }
