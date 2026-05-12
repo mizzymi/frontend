@@ -8,7 +8,7 @@ import { AdminService } from '../../../core/services/admin';
   selector: 'app-admin-products',
   imports: [NgFor, NgIf, FormsModule, CurrencyPipe],
   templateUrl: './admin-products.html',
-  styleUrl: './admin-products.scss'
+  styleUrl: './admin-products.scss',
 })
 export class AdminProducts implements OnInit {
   products: any[] = [];
@@ -28,11 +28,15 @@ export class AdminProducts implements OnInit {
     description: '',
     price: '',
     stock: '',
+    weight: '',
+    width: '',
+    height: '',
+    depth: '',
     category: '',
     colors: '',
     sizes: '',
     customizable: false,
-    featured: false
+    featured: false,
   };
 
   editForm = {
@@ -41,14 +45,18 @@ export class AdminProducts implements OnInit {
     description: '',
     price: '',
     stock: '',
+    weight: '',
+    width: '',
+    height: '',
+    depth: '',
     category: '',
     colors: '',
     sizes: '',
     customizable: false,
-    featured: false
+    featured: false,
   };
 
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -58,15 +66,15 @@ export class AdminProducts implements OnInit {
     this.loading = true;
 
     this.adminService.getProducts().subscribe({
-      next: res => {
+      next: (res) => {
         this.products = res;
         this.loading = false;
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
         this.errorMessage = 'Error cargando productos';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -106,12 +114,12 @@ export class AdminProducts implements OnInit {
 
   private toArray(value: string | string[]): string[] {
     if (Array.isArray(value)) {
-      return value.map(v => String(v).trim()).filter(Boolean);
+      return value.map((v) => String(v).trim()).filter(Boolean);
     }
 
     return value
       .split(',')
-      .map(v => v.trim())
+      .map((v) => v.trim())
       .filter(Boolean);
   }
 
@@ -125,7 +133,10 @@ export class AdminProducts implements OnInit {
     data.append('description', this.formData.description);
     data.append('price', String(Number(this.formData.price)));
     data.append('stock', String(Number(this.formData.stock)));
-
+    data.append('weight', String(Number(this.formData.weight || 0)));
+    data.append('width', String(Number(this.formData.width || 0)));
+    data.append('height', String(Number(this.formData.height || 0)));
+    data.append('depth', String(Number(this.formData.depth || 0)));
     data.append('category', JSON.stringify(this.toArray(this.formData.category)));
 
     data.append('colors', JSON.stringify(this.toArray(this.formData.colors)));
@@ -134,7 +145,7 @@ export class AdminProducts implements OnInit {
     data.append('customizable', String(this.formData.customizable));
     data.append('featured', String(this.formData.featured));
 
-    this.selectedImages.forEach(file => {
+    this.selectedImages.forEach((file) => {
       data.append('images', file);
     });
 
@@ -146,22 +157,24 @@ export class AdminProducts implements OnInit {
           description: '',
           price: '',
           stock: '',
+          weight: '',
+          width: '',
+          height: '',
+          depth: '',
           category: '',
           colors: '',
           sizes: '',
           customizable: false,
-          featured: false
+          featured: false,
         };
 
         this.selectedImages = [];
         this.loadProducts();
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
-        this.errorMessage =
-          err.error?.message ||
-          'Error creando producto';
-      }
+        this.errorMessage = err.error?.message || 'Error creando producto';
+      },
     });
   }
 
@@ -176,21 +189,20 @@ export class AdminProducts implements OnInit {
       description: product.description || '',
       price: String(product.price ?? ''),
       stock: String(product.stock ?? ''),
-
+      weight: String(product.weight ?? ''),
+      width: String(product.width ?? ''),
+      height: String(product.height ?? ''),
+      depth: String(product.depth ?? ''),
       category: Array.isArray(product.category)
         ? product.category.join(', ')
         : product.category || '',
 
-      colors: Array.isArray(product.colors)
-        ? product.colors.join(', ')
-        : product.colors || '',
+      colors: Array.isArray(product.colors) ? product.colors.join(', ') : product.colors || '',
 
-      sizes: Array.isArray(product.sizes)
-        ? product.sizes.join(', ')
-        : product.sizes || '',
+      sizes: Array.isArray(product.sizes) ? product.sizes.join(', ') : product.sizes || '',
 
       customizable: !!product.customizable,
-      featured: !!product.featured
+      featured: !!product.featured,
     };
   }
 
@@ -212,7 +224,10 @@ export class AdminProducts implements OnInit {
     data.append('description', this.editForm.description);
     data.append('price', String(Number(this.editForm.price)));
     data.append('stock', String(Number(this.editForm.stock)));
-
+    data.append('weight', String(Number(this.editForm.weight || 0)));
+    data.append('width', String(Number(this.editForm.width || 0)));
+    data.append('height', String(Number(this.editForm.height || 0)));
+    data.append('depth', String(Number(this.editForm.depth || 0)));
     data.append('category', JSON.stringify(this.toArray(this.editForm.category)));
 
     data.append('colors', JSON.stringify(this.toArray(this.editForm.colors)));
@@ -223,26 +238,21 @@ export class AdminProducts implements OnInit {
 
     data.append('existingImages', JSON.stringify(this.editImages));
 
-    this.newEditImages.forEach(file => {
+    this.newEditImages.forEach((file) => {
       data.append('images', file);
     });
 
-    this.adminService.updateProduct(
-      this.editingProduct._id,
-      data
-    ).subscribe({
+    this.adminService.updateProduct(this.editingProduct._id, data).subscribe({
       next: () => {
         this.editingProduct = null;
         this.editImages = [];
         this.newEditImages = [];
         this.loadProducts();
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
-        this.errorMessage =
-          err.error?.message ||
-          'Error actualizando producto';
-      }
+        this.errorMessage = err.error?.message || 'Error actualizando producto';
+      },
     });
   }
 
@@ -255,12 +265,10 @@ export class AdminProducts implements OnInit {
       next: () => {
         this.loadProducts();
       },
-      error: err => {
+      error: (err) => {
         console.error(err);
-        this.errorMessage =
-          err.error?.message ||
-          'Error eliminando producto';
-      }
+        this.errorMessage = err.error?.message || 'Error eliminando producto';
+      },
     });
   }
 }

@@ -46,6 +46,31 @@
       </div>
 
       <div class="field">
+        <label>Peso (g)</label>
+        <input
+          name="weight"
+          type="number"
+          placeholder="Peso en gramos"
+          [(ngModel)]="formData.weight"
+        />
+      </div>
+
+      <div class="field">
+        <label>Ancho (cm)</label>
+        <input name="width" type="number" placeholder="Ancho" [(ngModel)]="formData.width" />
+      </div>
+
+      <div class="field">
+        <label>Alto (cm)</label>
+        <input name="height" type="number" placeholder="Alto" [(ngModel)]="formData.height" />
+      </div>
+
+      <div class="field">
+        <label>Fondo (cm)</label>
+        <input name="depth" type="number" placeholder="Fondo" [(ngModel)]="formData.depth" />
+      </div>
+
+      <div class="field">
         <label>Categoría</label>
         <input name="category" placeholder="Categoría" [(ngModel)]="formData.category" />
       </div>
@@ -111,6 +136,11 @@
 
         <p><strong>Slug:</strong> {{ product.slug || '-' }}</p>
         <p><strong>Stock:</strong> {{ product.stock }}</p>
+        <p><strong>Peso:</strong> {{ product.weight || 0 }} g</p>
+        <p>
+          <strong>Dimensiones:</strong>
+          {{ product.width || 0 }} x {{ product.height || 0 }} x {{ product.depth || 0 }} cm
+        </p>
         <p><strong>Categoría:</strong> {{ product.category || '-' }}</p>
         <p><strong>Colores:</strong> {{ product.colors?.join(', ') || '-' }}</p>
         <p><strong>Tamaños:</strong> {{ product.sizes?.join(', ') || '-' }}</p>
@@ -142,6 +172,31 @@
         <div class="field">
           <label>Stock</label>
           <input name="editStock" type="number" [(ngModel)]="editForm.stock" placeholder="Stock" />
+        </div>
+
+        <div class="field">
+          <label>Peso (g)</label>
+          <input
+            name="editWeight"
+            type="number"
+            [(ngModel)]="editForm.weight"
+            placeholder="Peso en gramos"
+          />
+        </div>
+
+        <div class="field">
+          <label>Ancho (cm)</label>
+          <input name="editWidth" type="number" [(ngModel)]="editForm.width" placeholder="Ancho" />
+        </div>
+
+        <div class="field">
+          <label>Alto (cm)</label>
+          <input name="editHeight" type="number" [(ngModel)]="editForm.height" placeholder="Alto" />
+        </div>
+
+        <div class="field">
+          <label>Fondo (cm)</label>
+          <input name="editDepth" type="number" [(ngModel)]="editForm.depth" placeholder="Fondo" />
         </div>
 
         <div class="field">
