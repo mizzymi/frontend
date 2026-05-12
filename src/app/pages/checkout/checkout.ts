@@ -137,10 +137,10 @@ export class Checkout implements OnInit {
       country === 'españa' ||
       country === 'spain'
     ) {
-      return 4.99;
+      return 5.99;
     }
 
-    return 12.99;
+    return 15.99;
   }
 
   getFinalTotal(): number {

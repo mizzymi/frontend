@@ -10,7 +10,7 @@ import { AuthService } from '../../../core/services/auth';
   selector: 'app-profile',
   imports: [NgIf, NgFor, FormsModule, CurrencyPipe, DatePipe, RouterLink],
   templateUrl: './profile.html',
-  styleUrl: './profile.scss'
+  styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
   user: any = null;
@@ -25,7 +25,7 @@ export class Profile implements OnInit {
   editForm = {
     name: '',
     username: '',
-    email: ''
+    email: '',
   };
 
   addressForm = {
@@ -36,14 +36,14 @@ export class Profile implements OnInit {
     province: '',
     postalCode: '',
     country: 'España',
-    isDefault: false
+    isDefault: false,
   };
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) {
@@ -58,13 +58,13 @@ export class Profile implements OnInit {
     this.loading = true;
 
     this.userService.getProfile().subscribe({
-      next: user => {
+      next: (user) => {
         this.user = user;
 
         this.editForm = {
           name: user.name || '',
           username: user.username || '',
-          email: user.email || ''
+          email: user.email || '',
         };
 
         this.loadExtraData();
@@ -72,28 +72,28 @@ export class Profile implements OnInit {
       error: () => {
         this.errorMessage = 'No se pudo cargar tu perfil.';
         this.loading = false;
-      }
+      },
     });
   }
 
   loadExtraData(): void {
     this.userService.getSavedProducts().subscribe({
-      next: res => this.savedProducts = res || []
+      next: (res) => (this.savedProducts = res || []),
     });
 
     this.userService.getMyReviews().subscribe({
-      next: res => this.reviews = res || []
+      next: (res) => (this.reviews = res || []),
     });
 
     this.userService.getMyOrders().subscribe({
-      next: res => {
+      next: (res) => {
         this.orders = res || [];
         this.loading = false;
       },
       error: () => {
         this.orders = [];
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -117,13 +117,13 @@ export class Profile implements OnInit {
     }
 
     this.userService.editProfile(data).subscribe({
-      next: res => {
+      next: (res) => {
         this.user = res.user;
         localStorage.setItem('user', JSON.stringify(res.user));
       },
-      error: err => {
+      error: (err) => {
         this.errorMessage = err.error?.message || 'Error editando perfil.';
-      }
+      },
     });
   }
 
@@ -139,37 +139,34 @@ export class Profile implements OnInit {
       !this.addressForm.postalCode ||
       !this.addressForm.country
     ) {
-      this.errorMessage =
-        'Completa todos los campos de dirección.';
+      this.errorMessage = 'Completa todos los campos de dirección.';
       return;
     }
 
-    this.userService
-      .addShippingAddress(this.addressForm)
-      .subscribe({
-        next: res => {
+    this.userService.addShippingAddress(this.addressForm).subscribe({
+      next: (res) => {
+        this.user.shippingAddresses = res.shippingAddresses || [];
 
-          this.user.shippingAddresses =
-            res.shippingAddresses || [];
+        this.addressForm = {
+          fullName: '',
+          phone: '',
+          street: '',
+          city: '',
+          province: '',
+          postalCode: '',
+          country: 'España',
+          isDefault: false,
+        };
+      },
 
-          this.addressForm = {
-            fullName: '',
-            phone: '',
-            street: '',
-            city: '',
-            province: '',
-            postalCode: '',
-            country: 'España',
-            isDefault: false
-          };
-        },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Error añadiendo dirección.';
+      },
+    });
+  }
 
-        error: err => {
-          this.errorMessage =
-            err.error?.message ||
-            'Error añadiendo dirección.';
-        }
-      });
+  payPending(order: any) {
+    window.location.href = `https://checkout.sumup.com/pay/${order.sumupCheckoutId}`;
   }
 
   logout(): void {

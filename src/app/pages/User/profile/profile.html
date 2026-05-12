@@ -62,6 +62,14 @@
             Total:
             <strong>{{ order.total | currency: 'EUR' }}</strong>
           </div>
+
+          <button
+            class="pay-pending"
+            *ngIf="order.status === 'pending'"
+            (click)="payPending(order)"
+          >
+            Pagar ahora
+          </button>
         </article>
       </section>
 
