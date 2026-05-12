@@ -6,8 +6,4 @@ export interface CartItem {
   color?: string;
   size?: string;
   customText?: string;
-  weight?: number;
-  width?: number;
-  height?: number;
-  depth?: number;
 }
