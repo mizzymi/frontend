@@ -253,3 +253,141 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
+
+select {
+  width: calc(100% - 32px);
+  background: #0c2327;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+select:focus {
+  border-color: #2ee6c5;
+  box-shadow: 0 0 0 4px rgba(46, 230, 197, 0.12);
+}
+
+.modifiers-admin {
+  display: grid;
+  gap: 18px;
+}
+
+.modifiers-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(46, 230, 197, 0.06);
+  border: 1px solid rgba(46, 230, 197, 0.16);
+
+  p {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  button {
+    white-space: nowrap;
+  }
+}
+
+.modifier-admin-card {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modifier-top {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.modifier-options-admin {
+  display: grid;
+  gap: 14px;
+}
+
+.modifier-option-admin {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr auto;
+  gap: 14px;
+  align-items: end;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(12, 35, 39, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  button {
+    height: 52px;
+  }
+}
+
+.modifier-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.product-modifiers-preview {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(46, 230, 197, 0.05);
+  border: 1px solid rgba(46, 230, 197, 0.12);
+
+  strong {
+    color: #eafffb;
+  }
+
+  ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+  }
+
+  li {
+    color: #9fb3b7;
+    margin-bottom: 4px;
+  }
+
+  span {
+    color: #2ee6c5;
+    font-weight: 800;
+  }
+}
+
+@media (max-width: 768px) {
+  .modifiers-header {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .modifier-top,
+  .modifier-option-admin {
+    grid-template-columns: 1fr;
+  }
+
+  .modifier-option-admin {
+    button {
+      height: auto;
+    }
+  }
+}
+
+.product-card.editing {
+  grid-column: 1 / -1 !important;
+}
+

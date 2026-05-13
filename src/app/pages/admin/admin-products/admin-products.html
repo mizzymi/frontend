@@ -15,16 +15,19 @@
     <div class="grid">
       <div class="field">
         <label>Nombre</label>
+
         <input name="name" placeholder="Nombre" [(ngModel)]="formData.name" required />
       </div>
 
       <div class="field">
         <label>Slug</label>
+
         <input name="slug" placeholder="reimii-producto-ejemplo" [(ngModel)]="formData.slug" />
       </div>
 
       <div class="field">
         <label>Precio (€)</label>
+
         <input
           name="price"
           type="number"
@@ -36,6 +39,7 @@
 
       <div class="field">
         <label>Stock</label>
+
         <input
           name="stock"
           type="number"
@@ -47,6 +51,7 @@
 
       <div class="field">
         <label>Peso (g)</label>
+
         <input
           name="weight"
           type="number"
@@ -57,50 +62,59 @@
 
       <div class="field">
         <label>Ancho (cm)</label>
+
         <input name="width" type="number" placeholder="Ancho" [(ngModel)]="formData.width" />
       </div>
 
       <div class="field">
         <label>Alto (cm)</label>
+
         <input name="height" type="number" placeholder="Alto" [(ngModel)]="formData.height" />
       </div>
 
       <div class="field">
         <label>Fondo (cm)</label>
+
         <input name="depth" type="number" placeholder="Fondo" [(ngModel)]="formData.depth" />
       </div>
 
       <div class="field">
         <label>Categoría</label>
+
         <input name="category" placeholder="Categoría" [(ngModel)]="formData.category" />
       </div>
 
       <div class="field">
         <label>Colores</label>
+
         <input
           name="colors"
-          placeholder="Negro + Dorado, Negro + Blanco, Custom"
+          placeholder="Negro, Blanco, Terracota..."
           [(ngModel)]="formData.colors"
         />
       </div>
 
       <div class="field">
         <label>Tamaños</label>
+
         <input name="sizes" placeholder="Único, S, M, L" [(ngModel)]="formData.sizes" />
       </div>
 
       <label class="check">
         <input type="checkbox" name="customizable" [(ngModel)]="formData.customizable" />
+
         Personalizable
       </label>
 
       <label class="check">
         <input type="checkbox" name="featured" [(ngModel)]="formData.featured" />
+
         Destacado
       </label>
 
       <div class="field full">
         <label>Descripción</label>
+
         <textarea
           name="description"
           placeholder="Descripción"
@@ -108,8 +122,142 @@
         ></textarea>
       </div>
 
+      <!-- MODIFICADORES CREATE -->
+
+      <div class="field full modifiers-admin">
+        <div class="modifiers-header">
+          <div>
+            <label>Modificadores del producto</label>
+
+            <p>Ejemplo: ilustración por delante, platillo, grabado...</p>
+          </div>
+
+          <button type="button" (click)="addModifier('create')">Añadir modificador</button>
+        </div>
+
+        <div class="modifier-admin-card" *ngFor="let modifier of formData.modifiers; let i = index">
+          <div class="modifier-top">
+            <div class="field">
+              <label>Nombre del grupo</label>
+
+              <input
+                [name]="'modifierName' + i"
+                placeholder="Personaliza tu tiesto"
+                [(ngModel)]="modifier.name"
+                (blur)="updateModifierId(modifier)"
+              />
+            </div>
+
+            <div class="field">
+              <label>ID interno</label>
+
+              <input
+                [name]="'modifierId' + i"
+                placeholder="illustration"
+                [(ngModel)]="modifier.id"
+              />
+            </div>
+
+            <div class="field">
+              <label>Tipo</label>
+
+              <select [name]="'modifierType' + i" [(ngModel)]="modifier.type">
+                <option value="single">Una opción</option>
+
+                <option value="multiple">Varias opciones</option>
+              </select>
+            </div>
+
+            <label class="check">
+              <input
+                type="checkbox"
+                [name]="'modifierRequired' + i"
+                [(ngModel)]="modifier.required"
+              />
+
+              Obligatorio
+            </label>
+          </div>
+
+          <div class="modifier-options-admin">
+            <div
+              class="modifier-option-admin"
+              *ngFor="let option of modifier.options; let j = index"
+            >
+              <div class="field">
+                <label>Texto opción</label>
+
+                <input
+                  [name]="'optionLabel' + i + '_' + j"
+                  placeholder="Añadir ilustración por delante"
+                  [(ngModel)]="option.label"
+                  (blur)="updateOptionId(option)"
+                />
+              </div>
+
+              <div class="field">
+                <label>ID opción</label>
+
+                <input
+                  [name]="'optionId' + i + '_' + j"
+                  placeholder="front"
+                  [(ngModel)]="option.id"
+                />
+              </div>
+
+              <div class="field">
+                <label>Precio extra (€)</label>
+
+                <input
+                  type="number"
+                  [name]="'optionPrice' + i + '_' + j"
+                  [(ngModel)]="option.price"
+                />
+              </div>
+
+              <div class="field">
+                <label>Imagen opción</label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  (change)="onModifierOptionImageSelected($event, option)"
+                />
+
+                <img *ngIf="option.image" class="modifier-preview-image" [src]="option.image" />
+              </div>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  [name]="'optionRequiresCustomerImage' + i + '_' + j"
+                  [(ngModel)]="option.requiresCustomerImage"
+                />
+
+                El cliente debe subir imagen
+              </label>
+
+              <button type="button" class="danger" (click)="removeModifierOption(modifier, j)">
+                Eliminar opción
+              </button>
+            </div>
+          </div>
+
+          <div class="modifier-actions">
+            <button type="button" class="secondary" (click)="addModifierOption(modifier)">
+              Añadir opción
+            </button>
+
+            <button type="button" class="danger" (click)="removeModifier('create', i)">
+              Eliminar modificador
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="field full">
         <label>Imágenes del producto</label>
+
         <input type="file" multiple accept="image/*" (change)="onImagesSelected($event)" />
       </div>
     </div>
@@ -124,10 +272,15 @@
   <div *ngIf="loading" class="loading">Cargando productos...</div>
 
   <div class="products-grid" *ngIf="!loading">
-    <article class="product-card" *ngFor="let product of products">
-      <img *ngIf="product.images?.length" [src]="product.images[0]" />
+    <article
+      class="product-card"
+      *ngFor="let product of products"
+      [class.editing]="editingProduct?._id === product._id"
+    >
+      <!-- VIEW -->
 
       <div *ngIf="editingProduct?._id !== product._id">
+        <img *ngIf="product.images?.length" [src]="product.images[0]" />
         <h3>{{ product.name }}</h3>
 
         <p class="price">
@@ -135,23 +288,86 @@
         </p>
 
         <p><strong>Slug:</strong> {{ product.slug || '-' }}</p>
+
         <p><strong>Stock:</strong> {{ product.stock }}</p>
-        <p><strong>Peso:</strong> {{ product.weight || 0 }} g</p>
+
+        <p>
+          <strong>Peso:</strong>
+          {{ product.weight || 0 }} g
+        </p>
+
         <p>
           <strong>Dimensiones:</strong>
-          {{ product.width || 0 }} x {{ product.height || 0 }} x {{ product.depth || 0 }} cm
+
+          {{ product.width || 0 }}
+          x
+          {{ product.height || 0 }}
+          x
+          {{ product.depth || 0 }} cm
         </p>
-        <p><strong>Categoría:</strong> {{ product.category || '-' }}</p>
-        <p><strong>Colores:</strong> {{ product.colors?.join(', ') || '-' }}</p>
-        <p><strong>Tamaños:</strong> {{ product.sizes?.join(', ') || '-' }}</p>
-        <p><strong>Personalizable:</strong> {{ product.customizable ? 'Sí' : 'No' }}</p>
-        <p><strong>Destacado:</strong> {{ product.featured ? 'Sí' : 'No' }}</p>
+
+        <p>
+          <strong>Categoría:</strong>
+          {{ product.category || '-' }}
+        </p>
+
+        <p>
+          <strong>Colores:</strong>
+          {{ product.colors?.join(', ') || '-' }}
+        </p>
+
+        <p>
+          <strong>Tamaños:</strong>
+          {{ product.sizes?.join(', ') || '-' }}
+        </p>
+
+        <p>
+          <strong>Personalizable:</strong>
+          {{ product.customizable ? 'Sí' : 'No' }}
+        </p>
+
+        <p>
+          <strong>Destacado:</strong>
+          {{ product.featured ? 'Sí' : 'No' }}
+        </p>
+
+        <div *ngIf="product.modifiers?.length">
+          <p><strong>Modificadores:</strong></p>
+
+          <div class="product-modifiers-preview">
+            <div *ngFor="let modifier of product.modifiers">
+              <strong>{{ modifier.name }}</strong>
+
+              <ul>
+                <li *ngFor="let option of modifier.options">
+                  <img
+                    *ngIf="option.image"
+                    class="modifier-preview-image"
+                    [src]="option.image"
+                    [alt]="option.label"
+                  />
+
+                  <span>
+                    {{ option.label }}
+
+                    <strong *ngIf="option.price > 0">
+                      +{{ option.price | currency: 'EUR' }}
+                    </strong>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         <div class="actions">
           <button type="button" (click)="startEdit(product)">Editar</button>
+
           <button type="button" class="danger" (click)="removeProduct(product)">Eliminar</button>
         </div>
       </div>
+
+      <!-- EDIT -->
 
       <div *ngIf="editingProduct?._id === product._id" class="edit-box">
         <div class="field">
@@ -209,7 +425,7 @@
           <input
             name="editColors"
             [(ngModel)]="editForm.colors"
-            placeholder="Negro + Dorado, Negro + Blanco, Custom"
+            placeholder="Negro, Blanco, Terracota..."
           />
         </div>
 
@@ -235,6 +451,130 @@
             [(ngModel)]="editForm.description"
             placeholder="Descripción"
           ></textarea>
+        </div>
+
+        <div class="field modifiers-admin">
+          <div class="modifiers-header">
+            <div>
+              <label>Modificadores del producto</label>
+              <p>Opciones extra que puede elegir el cliente.</p>
+            </div>
+
+            <button type="button" (click)="addModifier('edit')">Añadir modificador</button>
+          </div>
+
+          <div
+            class="modifier-admin-card"
+            *ngFor="let modifier of editForm.modifiers; let i = index"
+          >
+            <div class="modifier-top">
+              <div class="field">
+                <label>Nombre del grupo</label>
+                <input
+                  [name]="'editModifierName' + i"
+                  placeholder="Personaliza tu tiesto"
+                  [(ngModel)]="modifier.name"
+                  (blur)="updateModifierId(modifier)"
+                />
+              </div>
+
+              <div class="field">
+                <label>ID interno</label>
+                <input
+                  [name]="'editModifierId' + i"
+                  placeholder="illustration"
+                  [(ngModel)]="modifier.id"
+                />
+              </div>
+
+              <div class="field">
+                <label>Tipo</label>
+                <select [name]="'editModifierType' + i" [(ngModel)]="modifier.type">
+                  <option value="single">Una opción</option>
+                  <option value="multiple">Varias opciones</option>
+                </select>
+              </div>
+
+              <label class="check">
+                <input
+                  type="checkbox"
+                  [name]="'editModifierRequired' + i"
+                  [(ngModel)]="modifier.required"
+                />
+                Obligatorio
+              </label>
+            </div>
+
+            <div class="modifier-options-admin">
+              <div
+                class="modifier-option-admin"
+                *ngFor="let option of modifier.options; let j = index"
+              >
+                <div class="field">
+                  <label>Texto opción</label>
+                  <input
+                    [name]="'editOptionLabel' + i + '_' + j"
+                    placeholder="Añadir ilustración por delante"
+                    [(ngModel)]="option.label"
+                    (blur)="updateOptionId(option)"
+                  />
+                </div>
+
+                <div class="field">
+                  <label>ID opción</label>
+                  <input
+                    [name]="'editOptionId' + i + '_' + j"
+                    placeholder="front"
+                    [(ngModel)]="option.id"
+                  />
+                </div>
+
+                <div class="field">
+                  <label>Precio extra (€)</label>
+                  <input
+                    type="number"
+                    [name]="'editOptionPrice' + i + '_' + j"
+                    [(ngModel)]="option.price"
+                  />
+                </div>
+
+                <div class="field">
+                  <label>Imagen opción</label>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onModifierOptionImageSelected($event, option)"
+                  />
+
+                  <img *ngIf="option.image" class="modifier-preview-image" [src]="option.image" />
+                </div>
+
+                <label class="check">
+                  <input
+                    type="checkbox"
+                    [name]="'editOptionRequiresCustomerImage' + i + '_' + j"
+                    [(ngModel)]="option.requiresCustomerImage"
+                  />
+                  El cliente debe subir imagen
+                </label>
+
+                <button type="button" class="danger" (click)="removeModifierOption(modifier, j)">
+                  Eliminar opción
+                </button>
+              </div>
+            </div>
+
+            <div class="modifier-actions">
+              <button type="button" class="secondary" (click)="addModifierOption(modifier)">
+                Añadir opción
+              </button>
+
+              <button type="button" class="danger" (click)="removeModifier('edit', i)">
+                Eliminar modificador
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="field">

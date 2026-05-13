@@ -35,6 +35,7 @@ export class AdminProducts implements OnInit {
     category: '',
     colors: '',
     sizes: '',
+    modifiers: [] as any[],
     customizable: false,
     featured: false,
   };
@@ -52,6 +53,7 @@ export class AdminProducts implements OnInit {
     category: '',
     colors: '',
     sizes: '',
+    modifiers: [] as any[],
     customizable: false,
     featured: false,
   };
@@ -123,6 +125,117 @@ export class AdminProducts implements OnInit {
       .filter(Boolean);
   }
 
+  private makeId(value: string, fallback: string): string {
+    const clean = value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+
+    return clean || `${fallback}_${Date.now()}`;
+  }
+
+  updateModifierId(modifier: any): void {
+    if (!modifier.id || modifier.id.startsWith('modifier_')) {
+      modifier.id = this.makeId(modifier.name, 'modifier');
+    }
+  }
+
+  updateOptionId(option: any): void {
+    if (!option.id || option.id.startsWith('option_')) {
+      option.id = this.makeId(option.label, 'option');
+    }
+  }
+
+  addModifier(target: 'create' | 'edit'): void {
+    const modifier = {
+      id: `modifier_${Date.now()}`,
+      name: '',
+      type: 'single',
+      required: false,
+      options: [],
+    };
+
+    if (target === 'create') {
+      this.formData.modifiers.push(modifier);
+    } else {
+      this.editForm.modifiers.push(modifier);
+    }
+  }
+
+  removeModifier(target: 'create' | 'edit', index: number): void {
+    if (target === 'create') {
+      this.formData.modifiers.splice(index, 1);
+    } else {
+      this.editForm.modifiers.splice(index, 1);
+    }
+  }
+
+  addModifierOption(modifier: any): void {
+    modifier.options.push({
+      id: `option_${Date.now()}`,
+      label: '',
+      price: 0,
+      description: '',
+      image: '',
+      imageFile: null,
+      requiresCustomerImage: false,
+    });
+  }
+
+  onModifierOptionImageSelected(event: Event, option: any): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files?.length) return;
+
+    option.imageFile = input.files[0];
+  }
+
+  removeModifierOption(modifier: any, index: number): void {
+    modifier.options.splice(index, 1);
+  }
+
+  private cleanModifiers(modifiers: any[]): any[] {
+    return (modifiers || [])
+      .filter((modifier) => modifier.name?.trim())
+      .map((modifier) => ({
+        id: this.makeId(modifier.id || modifier.name, 'modifier'),
+        name: modifier.name?.trim(),
+        type: modifier.type || 'single',
+        required: !!modifier.required,
+        options: (modifier.options || [])
+          .filter((option: any) => option.label?.trim())
+          .map((option: any) => ({
+            id: this.makeId(option.id || option.label, 'option'),
+            label: option.label?.trim(),
+            price: Number(option.price || 0),
+            description: option.description || '',
+            image: option.image || '',
+            requiresCustomerImage: !!option.requiresCustomerImage,
+          })),
+      }));
+  }
+
+  private appendModifierOptionImages(
+    data: FormData,
+    originalModifiers: any[],
+    cleanedModifiers: any[],
+  ): void {
+    cleanedModifiers.forEach((modifier: any, modifierIndex: number) => {
+      modifier.options.forEach((option: any, optionIndex: number) => {
+        const originalOption = originalModifiers?.[modifierIndex]?.options?.[optionIndex];
+
+        if (originalOption?.imageFile) {
+          data.append(
+            `modifier_option_image_${modifier.id}_${option.id}`,
+            originalOption.imageFile,
+          );
+        }
+      });
+    });
+  }
+
   createProduct(): void {
     this.errorMessage = '';
 
@@ -138,10 +251,13 @@ export class AdminProducts implements OnInit {
     data.append('height', String(Number(this.formData.height || 0)));
     data.append('depth', String(Number(this.formData.depth || 0)));
     data.append('category', JSON.stringify(this.toArray(this.formData.category)));
-
     data.append('colors', JSON.stringify(this.toArray(this.formData.colors)));
     data.append('sizes', JSON.stringify(this.toArray(this.formData.sizes)));
+    const cleanedModifiers = this.cleanModifiers(this.formData.modifiers);
 
+    this.appendModifierOptionImages(data, this.formData.modifiers, cleanedModifiers);
+
+    data.append('modifiers', JSON.stringify(cleanedModifiers));
     data.append('customizable', String(this.formData.customizable));
     data.append('featured', String(this.formData.featured));
 
@@ -164,6 +280,7 @@ export class AdminProducts implements OnInit {
           category: '',
           colors: '',
           sizes: '',
+          modifiers: [],
           customizable: false,
           featured: false,
         };
@@ -196,11 +313,9 @@ export class AdminProducts implements OnInit {
       category: Array.isArray(product.category)
         ? product.category.join(', ')
         : product.category || '',
-
       colors: Array.isArray(product.colors) ? product.colors.join(', ') : product.colors || '',
-
       sizes: Array.isArray(product.sizes) ? product.sizes.join(', ') : product.sizes || '',
-
+      modifiers: product.modifiers ? JSON.parse(JSON.stringify(product.modifiers)) : [],
       customizable: !!product.customizable,
       featured: !!product.featured,
     };
@@ -229,13 +344,15 @@ export class AdminProducts implements OnInit {
     data.append('height', String(Number(this.editForm.height || 0)));
     data.append('depth', String(Number(this.editForm.depth || 0)));
     data.append('category', JSON.stringify(this.toArray(this.editForm.category)));
-
     data.append('colors', JSON.stringify(this.toArray(this.editForm.colors)));
     data.append('sizes', JSON.stringify(this.toArray(this.editForm.sizes)));
+    const cleanedModifiers = this.cleanModifiers(this.editForm.modifiers);
 
+    this.appendModifierOptionImages(data, this.editForm.modifiers, cleanedModifiers);
+
+    data.append('modifiers', JSON.stringify(cleanedModifiers));
     data.append('customizable', String(this.editForm.customizable));
     data.append('featured', String(this.editForm.featured));
-
     data.append('existingImages', JSON.stringify(this.editImages));
 
     this.newEditImages.forEach((file) => {

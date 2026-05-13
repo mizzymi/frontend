@@ -6,4 +6,6 @@ export interface CartItem {
   color?: string;
   size?: string;
   customText?: string;
+  modifiers?: any[];
+  customerImages?: any;
 }

@@ -58,8 +58,13 @@
       <h1>{{ product.name }}</h1>
 
       <strong class="price">
-        {{ product.price | currency: 'EUR' }}
+        {{ getFinalPrice() | currency: 'EUR' }}
       </strong>
+
+      <p class="base-price" *ngIf="getModifiersTotal() > 0">
+        Precio base: {{ product.price | currency: 'EUR' }} · Extras:
+        {{ getModifiersTotal() | currency: 'EUR' }}
+      </p>
 
       <button type="button" class="like-btn" (click)="toggleLike()">
         <span *ngIf="!isSaved">♡ Guardar producto</span>
@@ -93,6 +98,98 @@
             [(ngModel)]="customText"
           />
         </label>
+
+        <div class="modifiers" *ngIf="product.modifiers?.length">
+          <div class="modifier-group" *ngFor="let modifier of product.modifiers">
+            <p class="modifier-title">{{ modifier.name }}</p>
+
+            <div class="modifier-options" *ngIf="modifier.type === 'single'">
+              <div class="modifier-option-wrap" *ngFor="let option of modifier.options">
+                <label class="modifier-option">
+                  <input
+                    type="checkbox"
+                    [checked]="isSingleModifierOptionSelected(modifier.id, option.id)"
+                    (change)="toggleSingleModifierOption(modifier.id, option.id)"
+                  />
+
+                  <img
+                    *ngIf="option.image"
+                    class="modifier-option-image"
+                    [src]="option.image"
+                    [alt]="option.label"
+                  />
+
+                  <span>
+                    {{ option.label }}
+
+                    <strong *ngIf="option.price > 0">
+                      +{{ option.price | currency: 'EUR' }}
+                    </strong>
+                  </span>
+                </label>
+
+                <div class="customer-upload" *ngIf="selectedOptionNeedsImage(modifier, option)">
+                  <label>
+                    Sube tu imagen
+                    <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onCustomerModifierImageSelected($event, modifier.id, option.id)"
+                    />
+                  </label>
+
+                  <p *ngIf="getCustomerImageFile(modifier.id, option.id)">
+                    Imagen seleccionada:
+                    {{ getCustomerImageFile(modifier.id, option.id)?.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="modifier-options" *ngIf="modifier.type === 'multiple'">
+              <div class="modifier-option-wrap" *ngFor="let option of modifier.options">
+                <label class="modifier-option">
+                  <input
+                    type="checkbox"
+                    [checked]="isModifierOptionSelected(modifier.id, option.id)"
+                    (change)="toggleModifierOption(modifier.id, option.id)"
+                  />
+
+                  <img
+                    *ngIf="option.image"
+                    class="modifier-option-image"
+                    [src]="option.image"
+                    [alt]="option.label"
+                  />
+
+                  <span>
+                    {{ option.label }}
+
+                    <strong *ngIf="option.price > 0">
+                      +{{ option.price | currency: 'EUR' }}
+                    </strong>
+                  </span>
+                </label>
+
+                <div class="customer-upload" *ngIf="selectedOptionNeedsImage(modifier, option)">
+                  <label>
+                    Sube tu imagen
+                    <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onCustomerModifierImageSelected($event, modifier.id, option.id)"
+                    />
+                  </label>
+
+                  <p *ngIf="getCustomerImageFile(modifier.id, option.id)">
+                    Imagen seleccionada:
+                    {{ getCustomerImageFile(modifier.id, option.id)?.name }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <label>
           Cantidad
