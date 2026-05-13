@@ -9,16 +9,16 @@ import { CartItem } from '../../models/cart-item.model';
   selector: 'app-cart',
   imports: [NgIf, NgFor, CurrencyPipe, RouterLink],
   templateUrl: './cart.html',
-  styleUrl: './cart.scss'
+  styleUrl: './cart.scss',
 })
 export class Cart implements OnInit {
   items: CartItem[] = [];
   total = 0;
 
-  constructor(private cartService: CartService) { }
+  constructor(public cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartService.cart$.subscribe(items => {
+    this.cartService.cart$.subscribe((items) => {
       this.items = items;
       this.total = this.cartService.getTotal();
     });
@@ -32,7 +32,8 @@ export class Cart implements OnInit {
       quantity,
       item.color,
       item.size,
-      item.customText
+      item.customText,
+      item.modifiers,
     );
   }
 
@@ -41,7 +42,8 @@ export class Cart implements OnInit {
       item.product._id,
       item.color,
       item.size,
-      item.customText
+      item.customText,
+      item.modifiers,
     );
   }
 

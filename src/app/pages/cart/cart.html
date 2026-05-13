@@ -29,7 +29,28 @@
             <span *ngIf="item.customText">Personalización: {{ item.customText }}</span>
           </div>
 
-          <strong>{{ item.product.price | currency: 'EUR' }}</strong>
+          <div class="cart-modifiers" *ngIf="item.modifiers?.length">
+            <div class="cart-modifier" *ngFor="let modifier of item.modifiers">
+              <strong>{{ modifier.name }}</strong>
+
+              <ul>
+                <li *ngFor="let option of modifier.options">
+                  {{ option.label }}
+
+                  <span *ngIf="option.price > 0"> (+{{ option.price | currency: 'EUR' }}) </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <strong>
+            {{ cartService.getItemUnitPrice(item) | currency: 'EUR' }}
+          </strong>
+
+          <small *ngIf="cartService.getItemModifiersTotal(item) > 0">
+            Base: {{ item.product.price | currency: 'EUR' }} · Extras:
+            {{ cartService.getItemModifiersTotal(item) | currency: 'EUR' }}
+          </small>
         </a>
 
         <div class="actions">

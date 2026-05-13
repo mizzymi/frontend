@@ -150,11 +150,16 @@ export class ProductDetail implements OnInit {
 
           return {
             id: modifier.id,
+            name: modifier.name,
+            type: modifier.type,
             options: [
               {
-                id: selectedOptionId,
-                requiresCustomerImage: !!option?.requiresCustomerImage,
-                customerImageKey: option?.requiresCustomerImage
+                id: option.id,
+                label: option.label,
+                price: option.price,
+                image: option.image,
+                requiresCustomerImage: !!option.requiresCustomerImage,
+                customerImageKey: option.requiresCustomerImage
                   ? this.getImageKey(modifier.id, selectedOptionId)
                   : undefined,
               },
@@ -173,11 +178,23 @@ export class ProductDetail implements OnInit {
               const option = modifier.options.find((option: any) => option.id === optionId);
 
               return {
-                id: optionId,
-                requiresCustomerImage: !!option?.requiresCustomerImage,
-                customerImageKey: option?.requiresCustomerImage
-                  ? this.getImageKey(modifier.id, optionId)
-                  : undefined,
+                id: modifier.id,
+                name: modifier.name,
+                type: modifier.type,
+                options: selectedOptionIds.map((optionId: string) => {
+                  const option = modifier.options.find((option: any) => option.id === optionId);
+
+                  return {
+                    id: optionId,
+                    label: option?.label,
+                    price: option?.price,
+                    image: option?.image,
+                    requiresCustomerImage: !!option?.requiresCustomerImage,
+                    customerImageKey: option?.requiresCustomerImage
+                      ? this.getImageKey(modifier.id, optionId)
+                      : undefined,
+                  };
+                }),
               };
             }),
           };
