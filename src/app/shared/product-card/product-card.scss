@@ -94,9 +94,28 @@ p {
   }
 }
 
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #facc15;
+  white-space: nowrap;
+}
+
+.stars {
+  color: #facc15;
+}
+
+.reviews {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
 .small {
   display: block;
-  
+
   @media (max-width: 920px) {
     display: none;
   }

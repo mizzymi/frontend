@@ -17,6 +17,11 @@
 
     <div class="bottom">
       <strong>{{ product.price | currency: 'EUR' }}</strong>
+
+      <div class="rating" *ngIf="product.ratingCount > 0">
+        <span class="stars">★ {{ product.ratingAverage | number: '1.1-1' }}</span>
+        <span class="reviews">({{ formatReviews(product.ratingCount) }})</span>
+      </div>
     </div>
   </div>
 </article>
