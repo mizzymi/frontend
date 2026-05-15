@@ -29,11 +29,14 @@
 
   .main-image {
     width: 100%;
+    height: min(70vh, 720px);
     border-radius: 28px;
     background: #0f172a;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     box-shadow: 0 28px 80px rgba(20, 184, 166, 0.08);
     cursor: zoom-in;
+    display: block;
   }
 }
 
@@ -55,20 +58,6 @@
   &:hover {
     background: #14b8a6;
     color: #042f2e;
-  }
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 45%;
-  transform: translateY(-50%);
-
-  &.left {
-    left: 14px;
-  }
-
-  &.right {
-    right: 14px;
   }
 }
 
@@ -567,20 +556,6 @@ h1 {
     }
   }
 
-  .carousel-btn {
-    width: 38px;
-    height: 38px;
-    font-size: 32px;
-
-    &.left {
-      left: 8px;
-    }
-
-    &.right {
-      right: 8px;
-    }
-  }
-
   .thumbs-wrapper {
     margin-top: 10px;
     grid-template-columns: 34px 1fr 34px;
@@ -802,5 +777,177 @@ h1 {
     color: #cbd5e1;
     font-size: 0.9rem;
     font-weight: 700;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail {
+    padding: 24px 14px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .gallery {
+    .main-image {
+      height: 360px;
+      object-fit: contain;
+      object-position: center;
+    }
+  }
+
+  .info {
+    padding: 22px;
+    border-radius: 22px;
+  }
+
+  h1 {
+    font-size: 2rem;
+    line-height: 1.08;
+  }
+
+  .price {
+    font-size: 28px;
+    margin: 18px 0 8px;
+  }
+
+  .base-price {
+    margin-bottom: 18px;
+    font-size: 0.88rem;
+  }
+
+  .like-btn {
+    padding: 13px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+  .options {
+    gap: 14px;
+
+    select,
+    input {
+      padding: 13px;
+      font-size: 15px;
+      border-radius: 13px;
+    }
+  }
+
+  .modifier-group {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .modifier-title {
+    font-size: 0.95rem;
+  }
+
+  .modifier-option {
+    align-items: flex-start;
+    padding: 12px;
+    border-radius: 13px;
+
+    span {
+      font-size: 0.9rem;
+    }
+
+    strong {
+      display: block;
+      margin-left: 0;
+      margin-top: 4px;
+    }
+  }
+
+  .modifier-option-image {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+  }
+
+  .customer-upload {
+    margin-left: 0;
+    padding: 12px;
+    border-radius: 13px;
+
+    label {
+      font-size: 0.9rem;
+    }
+
+    input {
+      font-size: 0.85rem;
+      padding: 10px;
+    }
+  }
+
+  .thumbs-wrapper {
+    grid-template-columns: 34px 1fr 34px;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .thumb-nav {
+    width: 34px;
+    height: 64px;
+    font-size: 26px;
+    border-radius: 12px;
+  }
+
+  .thumbs {
+    gap: 8px;
+
+    button {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+    }
+  }
+
+  .description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .review-card {
+    padding: 14px;
+  }
+
+  .review-user {
+    gap: 10px;
+
+    img {
+      width: 42px;
+      height: 42px;
+    }
+  }
+
+  .review-form {
+    select,
+    textarea {
+      font-size: 15px;
+    }
+  }
+
+  .modal-arrow {
+    display: none;
+  }
+
+  .image-modal {
+    padding: 14px;
+
+    img {
+      max-width: 94vw;
+      max-height: 82vh;
+      border-radius: 18px;
+    }
+  }
+
+  .close-modal {
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    font-size: 26px;
   }
 }

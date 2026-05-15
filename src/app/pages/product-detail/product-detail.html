@@ -9,15 +9,6 @@
       (touchstart)="onTouchStart($event)"
       (touchend)="onTouchEnd($event)"
     >
-      <button
-        type="button"
-        class="carousel-btn left"
-        *ngIf="product.images.length > 1"
-        (click)="prevImage()"
-      >
-        ‹
-      </button>
-
       <img
         class="main-image"
         [src]="selectedImage || 'https://placehold.co/900x900?text=REIMII+3D'"
@@ -25,21 +16,13 @@
         (click)="openImageModal()"
       />
 
-      <button
-        type="button"
-        class="carousel-btn right"
-        *ngIf="product.images.length > 1"
-        (click)="nextImage()"
-      >
-        ›
-      </button>
-
       <div class="thumbs-wrapper" *ngIf="product.images.length > 1">
         <button type="button" class="thumb-nav left" (click)="prevImage()">‹</button>
 
-        <div class="thumbs">
+        <div class="thumbs" #thumbsContainer>
           <button
             type="button"
+            #thumbButton
             *ngFor="let image of product.images; let i = index"
             [class.active]="selectedImage === image"
             (click)="selectImage(image, i)"

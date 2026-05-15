@@ -1,4 +1,11 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CurrencyPipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +23,7 @@ import { AuthService } from '../../core/services/auth';
   styleUrl: './product-detail.scss',
 })
 export class ProductDetail implements OnInit {
+  @ViewChildren('thumbButton') thumbButtons!: QueryList<ElementRef>;
   product?: Product;
   loading = true;
   error = '';
@@ -44,6 +52,18 @@ export class ProductDetail implements OnInit {
     public authService: AuthService,
     private router: Router,
   ) {}
+
+  private scrollActiveThumbIntoView(): void {
+    setTimeout(() => {
+      const button = this.thumbButtons?.get(this.selectedImageIndex);
+
+      button?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    });
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -315,6 +335,7 @@ export class ProductDetail implements OnInit {
   selectImage(image: string, index: number): void {
     this.selectedImage = image;
     this.selectedImageIndex = index;
+    this.scrollActiveThumbIntoView();
   }
 
   onImageWheel(event: WheelEvent): void {
@@ -330,7 +351,7 @@ export class ProductDetail implements OnInit {
     } else {
       this.prevImage();
     }
-
+    this.scrollActiveThumbIntoView();
     setTimeout(() => {
       this.wheelLocked = false;
     }, 350);
@@ -342,6 +363,7 @@ export class ProductDetail implements OnInit {
     this.selectedImageIndex = (this.selectedImageIndex + 1) % this.product.images.length;
 
     this.selectedImage = this.product.images[this.selectedImageIndex];
+    this.scrollActiveThumbIntoView();
   }
 
   prevImage(): void {
@@ -351,6 +373,7 @@ export class ProductDetail implements OnInit {
       (this.selectedImageIndex - 1 + this.product.images.length) % this.product.images.length;
 
     this.selectedImage = this.product.images[this.selectedImageIndex];
+    this.scrollActiveThumbIntoView();
   }
 
   openImageModal(): void {
